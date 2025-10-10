@@ -1,0 +1,16 @@
+# ===== MavPark Backend Requirements =====
+# Core Dependencies for Raspberry Pi + OpenCV
+opencv-python==4.10.0.84
+numpy==1.26.4
+
+# For API development (Flask)
+Flask==3.0.3
+Flask-Cors==4.0.0
+requests==2.32.3
+
+# For reading .env files securely
+python-dotenv==1.0.1
+
+# Optional (for future ML model integration)
+ultralytics==8.3.2      # YOLOv8 support (optional)
+pandas==2.2.3            # For structured data handling

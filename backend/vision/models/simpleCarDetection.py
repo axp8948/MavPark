@@ -1,12 +1,12 @@
+import os
+from dotenv import load_dotenv
 import cv2
 
-# ==== CONFIGURATION ====
-CAMERA_URL = "rtsp://admin:Mavpark17@<CAM_IP>:8554/Streaming/Channels/102"
+load_dotenv()
 
-# Pretrained Haar Cascade for car detection (lightweight)
+CAMERA_URL = os.getenv("CAMERA_URL")
 CAR_CASCADE_PATH = cv2.data.haarcascades + "haarcascade_car.xml"
 
-# ==== INITIALIZE ====
 car_cascade = cv2.CascadeClassifier(CAR_CASCADE_PATH)
 cap = cv2.VideoCapture(CAMERA_URL)
 

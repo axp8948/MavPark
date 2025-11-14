@@ -1,6 +1,6 @@
-/Users/anmolpandey/Desktop/mavPark/spring-backend/src/main/java/com/mavpark/dto/ParkingUpdateRequest.java
-/Users/anmolpandey/Desktop/mavPark/spring-backend/src/main/java/com/mavpark/SpringBackendApplication.java
-/Users/anmolpandey/Desktop/mavPark/spring-backend/src/main/java/com/mavpark/config/WebSocketConfig.java
-/Users/anmolpandey/Desktop/mavPark/spring-backend/src/main/java/com/mavpark/config/WebConfig.java
-/Users/anmolpandey/Desktop/mavPark/spring-backend/src/main/java/com/mavpark/controller/ParkingController.java
-/Users/anmolpandey/Desktop/mavPark/spring-backend/src/main/java/com/mavpark/service/ParkingService.java
+/Users/piyushsingh/Desktop/MavPark/spring-backend/src/main/java/com/mavpark/SpringBackendApplication.java
+/Users/piyushsingh/Desktop/MavPark/spring-backend/src/main/java/com/mavpark/config/WebSocketConfig.java
+/Users/piyushsingh/Desktop/MavPark/spring-backend/src/main/java/com/mavpark/config/WebConfig.java
+/Users/piyushsingh/Desktop/MavPark/spring-backend/src/main/java/com/mavpark/controller/ParkingController.java
+/Users/piyushsingh/Desktop/MavPark/spring-backend/src/main/java/com/mavpark/dto/ParkingUpdateRequest.java
+/Users/piyushsingh/Desktop/MavPark/spring-backend/src/main/java/com/mavpark/service/ParkingService.java

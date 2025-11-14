@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MavPark WebSocket Tester</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #2563EB;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .subtitle {
+            color: #6B7280;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+        
+        .status.connected {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+        
+        .status.disconnected {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #374151;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #2563EB;
+        }
+        
+        button {
+            background: #2563EB;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #1D4ED8;
+        }
+        
+        button:active {
+            transform: scale(0.98);
+        }
+        
+        .log {
+            margin-top: 30px;
+            background: #F9FAFB;
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        
+        .log-entry {
+            padding: 8px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            border-left: 3px solid #2563EB;
+            background: white;
+        }
+        
+        .log-entry.success {
+            border-left-color: #10B981;
+        }
+        
+        .log-entry.error {
+            border-left-color: #EF4444;
+            color: #991B1B;
+        }
+        
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        .indicator.on {
+            background: #10B981;
+            box-shadow: 0 0 10px #10B981;
+        }
+        
+        .indicator.off {
+            background: #EF4444;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        @media (max-width: 600px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            🚗 MavPark WebSocket Tester
+        </h1>
+        <p class="subtitle">Test your Spring Boot backend WebSocket integration</p>
+        
+        <div id="status" class="status disconnected">
+            <span class="indicator off" id="indicator"></span>
+            <span id="statusText">Not Connected</span>
+        </div>
+        
+        <h3 style="margin-bottom: 15px; color: #374151;">Send Parking Update</h3>
+        
+        <form id="updateForm">
+            <div class="form-group">
+                <label for="lotName">Parking Lot Name</label>
+                <input type="text" id="lotName" value="Lot 1" required>
+            </div>
+            
+            <div class="grid">
+                <div class="form-group">
+                    <label for="totalSpots">Total Spots</label>
+                    <input type="number" id="totalSpots" value="40" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="freeSpots">Free Spots</label>
+                    <input type="number" id="freeSpots" value="25" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="occupiedSpots">Occupied Spots</label>
+                <input type="number" id="occupiedSpots" value="15" required>
+            </div>
+            
+            <button type="submit">Send Update to Spring Backend</button>
+        </form>
+        
+        <div class="log">
+            <strong>Log:</strong>
+            <div id="logContent"></div>
+        </div>
+    </div>
+    
+    <script>
+        const BACKEND_URL = 'http://localhost:8080';
+        const statusEl = document.getElementById('status');
+        const statusTextEl = document.getElementById('statusText');
+        const indicatorEl = document.getElementById('indicator');
+        const logContentEl = document.getElementById('logContent');
+        
+        // Check backend connection
+        async function checkConnection() {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/parking/status`);
+                if (response.ok) {
+                    setConnected(true);
+                    addLog('✅ Connected to Spring backend', 'success');
+                    
+                    const data = await response.json();
+                    addLog(`📊 Current status: ${JSON.stringify(data)}`, 'success');
+                } else {
+                    setConnected(false);
+                    addLog('❌ Backend returned error', 'error');
+                }
+            } catch (error) {
+                setConnected(false);
+                addLog(`❌ Cannot connect to backend: ${error.message}`, 'error');
+                addLog('💡 Make sure Spring Boot is running on port 8080', 'error');
+            }
+        }
+        
+        function setConnected(connected) {
+            if (connected) {
+                statusEl.className = 'status connected';
+                statusTextEl.textContent = 'Connected to Spring Backend';
+                indicatorEl.className = 'indicator on';
+            } else {
+                statusEl.className = 'status disconnected';
+                statusTextEl.textContent = 'Backend Not Available';
+                indicatorEl.className = 'indicator off';
+            }
+        }
+        
+        function addLog(message, type = 'info') {
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logContentEl.insertBefore(entry, logContentEl.firstChild);
+            
+            // Keep only last 20 entries
+            while (logContentEl.children.length > 20) {
+                logContentEl.removeChild(logContentEl.lastChild);
+            }
+        }
+        
+        // Handle form submission
+        document.getElementById('updateForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const parkingData = {
+                parkingLotName: document.getElementById('lotName').value,
+                totalSpots: parseInt(document.getElementById('totalSpots').value),
+                freeSpots: parseInt(document.getElementById('freeSpots').value),
+                occupiedSpots: parseInt(document.getElementById('occupiedSpots').value)
+            };
+            
+            addLog(`📤 Sending update: ${JSON.stringify(parkingData)}`);
+            
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/parking/update`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(parkingData)
+                });
+                
+                if (response.ok) {
+                    const result = await response.text();
+                    addLog(`✅ Update sent successfully: ${result}`, 'success');
+                    addLog('📡 WebSocket broadcast sent to all connected frontends!', 'success');
+                } else {
+                    addLog(`❌ Failed to send update: ${response.statusText}`, 'error');
+                }
+            } catch (error) {
+                addLog(`❌ Error sending update: ${error.message}`, 'error');
+            }
+        });
+        
+        // Check connection on load
+        addLog('🚀 Starting WebSocket tester...');
+        checkConnection();
+        
+        // Recheck connection every 5 seconds
+        setInterval(checkConnection, 5000);
+    </script>
+</body>
+</html>
+

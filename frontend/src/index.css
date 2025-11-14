@@ -1,3 +1,63 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* Set global font to Momo Trust Display from Google Fonts */
+html, body, #root {
+  font-family: 'Momo Trust Display', system-ui, sans-serif;
+}
+
+/* Theme tokens and dark mode variant */
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: 248 250 252; /* slate-50 */
+  --foreground: 15 23 42;    /* slate-900 */
+  --muted: 226 232 240;      /* slate-200 */
+  --muted-foreground: 71 85 105; /* slate-600 */
+  --card: 255 255 255;       /* white */
+  --card-foreground: 15 23 42;
+  --border: 226 232 240;
+  --sidebar: 241 245 249;    /* slate-100 */
+  --sidebar-foreground: 15 23 42;
+  --primary: 37 99 235;      /* blue-600 */
+  --primary-foreground: 255 255 255;
+  --accent: 234 88 12;       /* orange-600 */
+  --accent-foreground: 255 255 255;
+  --chart-1: 37 99 235;      /* blue */
+  --chart-2: 234 88 12;      /* orange */
+  --chart-3: 34 197 94;      /* green */
+  --chart-4: 239 68 68;      /* red */
+  --chart-5: 168 85 247;     /* purple */
+}
+
+.dark:root {
+  --background: 2 6 23;      /* slate-950 */
+  --foreground: 241 245 249; /* slate-100 */
+  --muted: 30 41 59;         /* slate-800 */
+  --muted-foreground: 148 163 184; /* slate-400 */
+  --card: 15 23 42;          /* slate-900 */
+  --card-foreground: 241 245 249;
+  --border: 51 65 85;        /* slate-700 */
+  --sidebar: 15 23 42;       /* slate-900 */
+  --sidebar-foreground: 241 245 249;
+  --primary: 59 130 246;     /* blue-500 */
+  --primary-foreground: 2 6 23;
+  --accent: 249 115 22;      /* orange-500 */
+  --accent-foreground: 2 6 23;
+  --chart-1: 59 130 246;
+  --chart-2: 249 115 22;
+  --chart-3: 34 197 94;
+  --chart-4: 239 68 68;
+  --chart-5: 168 85 247;
+}
+
+.bg-app { background-color: rgb(var(--background)); }
+.text-app { color: rgb(var(--foreground)); }
+.bg-card { background-color: rgb(var(--card)); }
+.text-card { color: rgb(var(--card-foreground)); }
+.border-app { border-color: rgb(var(--border)); }
+.bg-sidebar { background-color: rgb(var(--sidebar)); }
+.text-sidebar { color: rgb(var(--sidebar-foreground)); }
+.bg-primary { background-color: rgb(var(--primary)); }
+.text-primary { color: rgb(var(--primary-foreground)); }
+.bg-accent { background-color: rgb(var(--accent)); }
+.text-accent { color: rgb(var(--accent-foreground)); }

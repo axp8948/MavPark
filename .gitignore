@@ -1,6 +1,6 @@
 # ====================================================
 # MavPark Project - Comprehensive .gitignore
-# Covers: Python + Node/React Native + Docs + System
+# Covers: Python + Node/React + Docs + System
 # ====================================================
 
 # --------------------------
@@ -32,7 +32,7 @@ secrets.json
 config.json
 
 # --------------------------
-# Node / React Native (Expo)
+# Node / React / Frontend
 # --------------------------
 node_modules/
 npm-debug.log*
@@ -75,7 +75,7 @@ ios/build/
 *.pbxuser
 
 # --------------------------
-# Python / OpenCV / API
+# Python / OpenCV / Backend
 # --------------------------
 __pycache__/
 *.pyc
@@ -121,7 +121,6 @@ celerybeat-schedule
 logs/
 *.csv
 *.tsv
-*.json
 *.xml
 *.yaml
 *.yml
@@ -149,10 +148,20 @@ logs/
 *.zip
 *.rar
 
+# Ignore all .json files by default...
+*.json
+# ...but keep important ones for Node/React
+!package.json
+!package-lock.json
+!tsconfig.json
+!babel.config.json
+!manifest.json
+!firebase.json
+
 # --------------------------
 # Images / Media (CV datasets)
 # --------------------------
-*.jpg
+# *.jpg
 *.jpeg
 *.png
 *.bmp
@@ -160,7 +169,7 @@ logs/
 *.tiff
 *.tif
 *.mp4
-*.mov
+# *.mov
 *.avi
 *.mkv
 *.flv
@@ -183,7 +192,6 @@ uploads/
 *.aux
 *.out
 *.synctex.gz
-*.log
 *.bbl
 *.blg
 *.toc

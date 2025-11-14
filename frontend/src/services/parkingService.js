@@ -141,3 +141,70 @@ export const updateSpotStatus = async (spotId, status) => {
   }
 };
 
+/**
+ * Get current parking status from Spring backend
+ * Endpoint: GET /api/parking/status
+ * 
+ * Returns: ParkingUpdateRequest
+ * {
+ *   parkingLotName: string,
+ *   totalSpots: number,
+ *   freeSpots: number,
+ *   occupiedSpots: number
+ * }
+ */
+export const getParkingStatus = async () => {
+  try {
+    const response = await fetch(`${config.apiBaseUrl}${config.endpoints.parkingStatus}`);
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch parking status');
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching parking status:', error);
+    throw error;
+  }
+};
+
+/**
+ * Update parking data (triggers WebSocket broadcast)
+ * Endpoint: POST /api/parking/update
+ * 
+ * This will update the parking data on the backend AND
+ * broadcast the update to all connected WebSocket clients
+ * 
+ * @param {Object} parkingData - Parking update data
+ * @param {string} parkingData.parkingLotName - Name of the parking lot
+ * @param {number} parkingData.totalSpots - Total parking spots
+ * @param {number} parkingData.freeSpots - Available spots
+ * @param {number} parkingData.occupiedSpots - Occupied spots
+ */
+export const updateParkingData = async (parkingData) => {
+  try {
+    const response = await fetch(
+      `${config.apiBaseUrl}${config.endpoints.parkingUpdate}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(parkingData),
+      }
+    );
+    
+    if (!response.ok) {
+      throw new Error('Failed to update parking data');
+    }
+    
+    const result = await response.text();
+    console.log('Parking data updated:', result);
+    return result;
+  } catch (error) {
+    console.error('Error updating parking data:', error);
+    throw error;
+  }
+};
+

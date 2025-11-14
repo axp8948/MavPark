@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
-import { Moon, Sun, HelpCircle } from "lucide-react";
-import { getParkingLots } from "../services/parkingService";
+import { Moon, Sun, HelpCircle, Wifi, WifiOff } from "lucide-react";
+import { getParkingLots, getParkingStatus } from "../services/parkingService";
+import { useWebSocket } from "../hooks/useWebSocket";
 import mavparkLogo from "../assets/images/Mavpark.png";
 
 function ParkingLots({ onSelectLot, isDarkMode, setIsDarkMode }) {
@@ -15,11 +16,62 @@ function ParkingLots({ onSelectLot, isDarkMode, setIsDarkMode }) {
     },
   ]);
 
-  // Fetch parking lots on mount
+  // WebSocket integration - connects to Spring Boot backend
+  const { isConnected, parkingData, error: wsError } = useWebSocket({
+    autoConnect: true,
+    autoSubscribe: true,
+  });
+
+  // Update parking lots when WebSocket receives data from Spring backend
   useEffect(() => {
+    if (parkingData) {
+      console.log('Received parking update from Spring:', parkingData);
+      
+      // Update the lot based on data from Spring backend (ParkingUpdateRequest)
+      // parkingData structure: {parkingLotName, totalSpots, freeSpots, occupiedSpots}
+      setLots((prevLots) =>
+        prevLots.map((lot) => {
+          // Match by lot name or update the first lot
+          if (lot.name === parkingData.parkingLotName || lot.id === 1) {
+            return {
+              ...lot,
+              name: parkingData.parkingLotName || lot.name,
+              totalSpots: parkingData.totalSpots || lot.totalSpots,
+              availableSpots: parkingData.freeSpots || lot.availableSpots,
+            };
+          }
+          return lot;
+        })
+      );
+    }
+  }, [parkingData]);
+
+  // Fetch initial parking status from Spring backend
+  useEffect(() => {
+    // Try to get initial data from Spring backend
+    getParkingStatus()
+      .then((data) => {
+        console.log('Initial parking status from Spring:', data);
+        if (data.parkingLotName) {
+          setLots([{
+            id: 1,
+            name: data.parkingLotName,
+            location: "Maybank",
+            totalSpots: data.totalSpots,
+            availableSpots: data.freeSpots,
+          }]);
+        }
+      })
+      .catch((err) => console.warn('Could not fetch initial status:', err));
+
+    // Also try the old endpoint as fallback
     getParkingLots()
-      .then((data) => setLots(data))
-      .catch((err) => console.error("Error fetching lots:", err));
+      .then((data) => {
+        if (data && data.length > 0) {
+          setLots(data);
+        }
+      })
+      .catch((err) => console.warn('Could not fetch parking lots:', err));
   }, []);
 
   useEffect(() => {
@@ -111,6 +163,37 @@ function ParkingLots({ onSelectLot, isDarkMode, setIsDarkMode }) {
                 </div>
               </motion.div>
             ))}
+          </div>
+
+          {/* WebSocket Connection Status */}
+          <div className="fixed top-8 right-8">
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full shadow-lg ${
+                isConnected
+                  ? isDarkMode
+                    ? "bg-green-900 text-green-300"
+                    : "bg-green-100 text-green-800"
+                  : isDarkMode
+                  ? "bg-red-900 text-red-300"
+                  : "bg-red-100 text-red-800"
+              }`}
+            >
+              {isConnected ? (
+                <>
+                  <Wifi className="w-4 h-4" />
+                  <span className="text-sm font-medium">Live Updates</span>
+                </>
+              ) : (
+                <>
+                  <WifiOff className="w-4 h-4" />
+                  <span className="text-sm font-medium">
+                    {wsError ? "Connection Error" : "Connecting..."}
+                  </span>
+                </>
+              )}
+            </motion.div>
           </div>
 
           {/* Dark Mode Toggle and Help Button */}

@@ -162,8 +162,8 @@ logs/
 # Images / Media (CV datasets)
 # --------------------------
 # *.jpg
-*.jpeg
-*.png
+# *.jpeg
+# *.png
 *.bmp
 *.gif
 *.tiff

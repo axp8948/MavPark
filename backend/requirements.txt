@@ -1,6 +1,7 @@
 # ===== MavPark Backend Requirements =====
 # Core Dependencies for Raspberry Pi + OpenCV
 opencv-python==4.10.0.84
+cvzone==1.6.1
 numpy==1.26.4
 
 # For API development (Flask)

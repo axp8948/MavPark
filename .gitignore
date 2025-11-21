@@ -6,6 +6,7 @@ Thumbs.db
 node_modules/
 dist/
 build/
+target/
 .env
 .env.*
 

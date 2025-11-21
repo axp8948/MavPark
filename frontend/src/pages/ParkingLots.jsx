@@ -16,6 +16,73 @@ function ParkingLots({ onSelectLot, isDarkMode, setIsDarkMode }) {
     },
   ]);
 
+  // Mini-map parking spots data (for visualization)
+  const [parkingSpots] = useState([
+    // Row A1: A01–A11
+    { id: 'A01', number: 'A01', status: 'occupied' },
+    { id: 'A02', number: 'A02', status: 'available' },
+    { id: 'A03', number: 'A03', status: 'occupied' },
+    { id: 'A04', number: 'A04', status: 'available' },
+    { id: 'A05', number: 'A05', status: 'available' },
+    { id: 'A06', number: 'A06', status: 'occupied' },
+    { id: 'A07', number: 'A07', status: 'available' },
+    { id: 'A08', number: 'A08', status: 'unknown' },
+    { id: 'A09', number: 'A09', status: 'available' },
+    { id: 'A10', number: 'A10', status: 'occupied' },
+    { id: 'A11', number: 'A11', status: 'available' },
+    // Row A2: A12–A22
+    { id: 'A12', number: 'A12', status: 'available' },
+    { id: 'A13', number: 'A13', status: 'occupied' },
+    { id: 'A14', number: 'A14', status: 'available' },
+    { id: 'A15', number: 'A15', status: 'available' },
+    { id: 'A16', number: 'A16', status: 'occupied' },
+    { id: 'A17', number: 'A17', status: 'available' },
+    { id: 'A18', number: 'A18', status: 'occupied' },
+    { id: 'A19', number: 'A19', status: 'available' },
+    { id: 'A20', number: 'A20', status: 'unknown' },
+    { id: 'A21', number: 'A21', status: 'available' },
+    { id: 'A22', number: 'A22', status: 'occupied' },
+    // Row B: B01–B11
+    { id: 'B01', number: 'B01', status: 'available' },
+    { id: 'B02', number: 'B02', status: 'occupied' },
+    { id: 'B03', number: 'B03', status: 'available' },
+    { id: 'B04', number: 'B04', status: 'available' },
+    { id: 'B05', number: 'B05', status: 'occupied' },
+    { id: 'B06', number: 'B06', status: 'available' },
+    { id: 'B07', number: 'B07', status: 'occupied' },
+    { id: 'B08', number: 'B08', status: 'available' },
+    { id: 'B09', number: 'B09', status: 'unknown' },
+    { id: 'B10', number: 'B10', status: 'available' },
+    { id: 'B11', number: 'B11', status: 'occupied' },
+  ]);
+
+  // Calculate status message based on availability
+  const getStatusInfo = (available, total) => {
+    const percentAvailable = (available / total) * 100;
+    if (percentAvailable >= 50) {
+      return { text: 'Plenty of space', color: 'bg-green-500' };
+    } else if (percentAvailable >= 20) {
+      return { text: 'Filling up', color: 'bg-yellow-500' };
+    } else {
+      return { text: 'Almost full', color: 'bg-red-500' };
+    }
+  };
+
+  // Derive rows for the visual layout (for mini-map)
+  const rowA1 = parkingSpots.filter((spot) => {
+    if (!spot.number.startsWith('A')) return false;
+    const n = parseInt(spot.number.substring(1), 10);
+    return n >= 1 && n <= 11;
+  });
+
+  const rowA2 = parkingSpots.filter((spot) => {
+    if (!spot.number.startsWith('A')) return false;
+    const n = parseInt(spot.number.substring(1), 10);
+    return n >= 12 && n <= 22;
+  });
+
+  const rowB = parkingSpots.filter((spot) => spot.number.startsWith('B'));
+
   // WebSocket integration - connects to Spring Boot backend
   const { isConnected, parkingData, error: wsError } = useWebSocket({
     autoConnect: true,
@@ -123,46 +190,152 @@ function ParkingLots({ onSelectLot, isDarkMode, setIsDarkMode }) {
             </p>
           </div>
 
-          {/* Header Section - Left Aligned */}
-          <div className="mb-6">
-            <h2
-              className={`${
-                isDarkMode ? "text-blue-400" : "text-[#2563EB]"
-              } text-2xl font-semibold`}
-            >
-              Available Parking Lots:
-            </h2>
-          </div>
-
-          {/* Parking Lots Grid */}
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {lots.map((lot) => (
-              <motion.div
-                key={lot.id}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <div
-                  className={`p-8 cursor-pointer hover:shadow-xl transition-all border-2 rounded-xl w-[350px] h-[350px] flex flex-col items-center justify-center ${
-                    isDarkMode
-                      ? "border-blue-400 bg-gray-800"
-                      : "border-[#2563EB] bg-white"
-                  }`}
-                  onClick={() => onSelectLot(lot.id)}
+          {/* Pilot Lot Overview Card */}
+          <div className="max-w-xl mx-auto">
+            {lots.map((lot) => {
+              const statusInfo = getStatusInfo(lot.availableSpots, lot.totalSpots);
+              
+              return (
+                <motion.div
+                  key={lot.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
                 >
-                  <h3
-                    className={`${
-                      isDarkMode ? "text-gray-300" : "text-[#4B5563]"
-                    } mb-6 text-2xl font-semibold`}
+                  <div
+                    className={`p-8 shadow-xl border-2 rounded-xl ${
+                      isDarkMode ? 'border-blue-400 bg-gray-800' : 'border-blue-200 bg-white'
+                    }`}
                   >
-                    {lot.name}
-                  </h3>
-                  <div className="bg-[#F97316] text-white hover:bg-[#EA580C] px-6 py-3 rounded-full text-base font-medium">
-                    {lot.availableSpots}/{lot.totalSpots} Available
+                    <h2
+                      className={`${
+                        isDarkMode ? 'text-blue-400' : 'text-blue-600'
+                      } mb-6 text-2xl font-semibold`}
+                    >
+                      Pilot Lot Overview
+                    </h2>
+
+                    <div className="space-y-6">
+                      {/* Lot Title */}
+                      <div>
+                        <h3
+                          className={`${
+                            isDarkMode ? 'text-gray-200' : 'text-gray-900'
+                          } mb-1 text-xl font-semibold`}
+                        >
+                          {lot.name}
+                        </h3>
+                        <p
+                          className={`text-sm ${
+                            isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                          }`}
+                        >
+                          {lot.location}
+                        </p>
+                      </div>
+
+                      {/* Availability Count */}
+                      <div
+                        className={`text-4xl font-semibold ${
+                          isDarkMode ? 'text-blue-400' : 'text-blue-600'
+                        }`}
+                      >
+                        {lot.availableSpots} / {lot.totalSpots} spaces free
+                      </div>
+
+                      {/* Status Pill */}
+                      <div>
+                        <span
+                          className={`${statusInfo.color} text-white px-4 py-1 rounded-full text-sm font-medium`}
+                        >
+                          {statusInfo.text}
+                        </span>
+                      </div>
+
+                      {/* Meta Info */}
+                      <p
+                        className={`text-sm ${
+                          isDarkMode ? 'text-gray-500' : 'text-gray-500'
+                        }`}
+                      >
+                        Updated 12s ago · Computer vision · No video stored
+                      </p>
+
+                      {/* Mini-map */}
+                      <div
+                        className={`rounded-lg p-4 ${
+                          isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
+                        }`}
+                      >
+                        <div className="flex flex-col gap-1.5">
+                          {/* Row A1 Mini */}
+                          <div className="flex gap-1">
+                            {rowA1.slice(0, 8).map((spot) => (
+                              <div
+                                key={spot.id}
+                                className={`w-3 h-4 rounded-sm ${
+                                  spot.status === 'available'
+                                    ? 'bg-green-500'
+                                    : spot.status === 'occupied'
+                                    ? 'bg-red-500'
+                                    : 'bg-gray-500'
+                                }`}
+                              />
+                            ))}
+                          </div>
+                          {/* Row A2 Mini */}
+                          <div className="flex gap-1">
+                            {rowA2.slice(0, 8).map((spot) => (
+                              <div
+                                key={spot.id}
+                                className={`w-3 h-4 rounded-sm ${
+                                  spot.status === 'available'
+                                    ? 'bg-green-500'
+                                    : spot.status === 'occupied'
+                                    ? 'bg-red-500'
+                                    : 'bg-gray-500'
+                                }`}
+                              />
+                            ))}
+                          </div>
+                          {/* Drive lane */}
+                          <div
+                            className={`h-2 ${
+                              isDarkMode ? 'bg-gray-800' : 'bg-gray-300'
+                            } rounded-sm`}
+                          />
+                          {/* Row B Mini */}
+                          <div className="flex gap-1">
+                            {rowB.slice(0, 8).map((spot) => (
+                              <div
+                                key={spot.id}
+                                className={`w-3 h-4 rounded-sm ${
+                                  spot.status === 'available'
+                                    ? 'bg-green-500'
+                                    : spot.status === 'occupied'
+                                    ? 'bg-red-500'
+                                    : 'bg-gray-500'
+                                }`}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* View Spot Map Button */}
+                      <motion.button
+                        onClick={() => onSelectLot(lot.id)}
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        View spot map
+                      </motion.button>
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              );
+            })}
           </div>
 
           {/* WebSocket Connection Status */}

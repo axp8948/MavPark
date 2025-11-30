@@ -9,51 +9,52 @@ function ParkingLots({ onSelectLot, isDarkMode, setIsDarkMode }) {
   const [lots, setLots] = useState([
     {
       id: 1,
-      name: "Lot 1",
-      location: "Maybank",
-      totalSpots: 12,
-      availableSpots: 5,
+      name: "Lot A",
+      location: "F-12",
+      totalSpots: 84,
+      availableSpots: 0,
     },
   ]);
 
   // Mini-map parking spots data (for visualization)
+  // All spots set to 'unknown' (gray) until CV model sends real data
   const [parkingSpots] = useState([
     // Row A1: A01–A11
-    { id: 'A01', number: 'A01', status: 'occupied' },
-    { id: 'A02', number: 'A02', status: 'available' },
-    { id: 'A03', number: 'A03', status: 'occupied' },
-    { id: 'A04', number: 'A04', status: 'available' },
-    { id: 'A05', number: 'A05', status: 'available' },
-    { id: 'A06', number: 'A06', status: 'occupied' },
-    { id: 'A07', number: 'A07', status: 'available' },
+    { id: 'A01', number: 'A01', status: 'unknown' },
+    { id: 'A02', number: 'A02', status: 'unknown' },
+    { id: 'A03', number: 'A03', status: 'unknown' },
+    { id: 'A04', number: 'A04', status: 'unknown' },
+    { id: 'A05', number: 'A05', status: 'unknown' },
+    { id: 'A06', number: 'A06', status: 'unknown' },
+    { id: 'A07', number: 'A07', status: 'unknown' },
     { id: 'A08', number: 'A08', status: 'unknown' },
-    { id: 'A09', number: 'A09', status: 'available' },
-    { id: 'A10', number: 'A10', status: 'occupied' },
-    { id: 'A11', number: 'A11', status: 'available' },
+    { id: 'A09', number: 'A09', status: 'unknown' },
+    { id: 'A10', number: 'A10', status: 'unknown' },
+    { id: 'A11', number: 'A11', status: 'unknown' },
     // Row A2: A12–A22
-    { id: 'A12', number: 'A12', status: 'available' },
-    { id: 'A13', number: 'A13', status: 'occupied' },
-    { id: 'A14', number: 'A14', status: 'available' },
-    { id: 'A15', number: 'A15', status: 'available' },
-    { id: 'A16', number: 'A16', status: 'occupied' },
-    { id: 'A17', number: 'A17', status: 'available' },
-    { id: 'A18', number: 'A18', status: 'occupied' },
-    { id: 'A19', number: 'A19', status: 'available' },
+    { id: 'A12', number: 'A12', status: 'unknown' },
+    { id: 'A13', number: 'A13', status: 'unknown' },
+    { id: 'A14', number: 'A14', status: 'unknown' },
+    { id: 'A15', number: 'A15', status: 'unknown' },
+    { id: 'A16', number: 'A16', status: 'unknown' },
+    { id: 'A17', number: 'A17', status: 'unknown' },
+    { id: 'A18', number: 'A18', status: 'unknown' },
+    { id: 'A19', number: 'A19', status: 'unknown' },
     { id: 'A20', number: 'A20', status: 'unknown' },
-    { id: 'A21', number: 'A21', status: 'available' },
-    { id: 'A22', number: 'A22', status: 'occupied' },
+    { id: 'A21', number: 'A21', status: 'unknown' },
+    { id: 'A22', number: 'A22', status: 'unknown' },
     // Row B: B01–B11
-    { id: 'B01', number: 'B01', status: 'available' },
-    { id: 'B02', number: 'B02', status: 'occupied' },
-    { id: 'B03', number: 'B03', status: 'available' },
-    { id: 'B04', number: 'B04', status: 'available' },
-    { id: 'B05', number: 'B05', status: 'occupied' },
-    { id: 'B06', number: 'B06', status: 'available' },
-    { id: 'B07', number: 'B07', status: 'occupied' },
-    { id: 'B08', number: 'B08', status: 'available' },
+    { id: 'B01', number: 'B01', status: 'unknown' },
+    { id: 'B02', number: 'B02', status: 'unknown' },
+    { id: 'B03', number: 'B03', status: 'unknown' },
+    { id: 'B04', number: 'B04', status: 'unknown' },
+    { id: 'B05', number: 'B05', status: 'unknown' },
+    { id: 'B06', number: 'B06', status: 'unknown' },
+    { id: 'B07', number: 'B07', status: 'unknown' },
+    { id: 'B08', number: 'B08', status: 'unknown' },
     { id: 'B09', number: 'B09', status: 'unknown' },
-    { id: 'B10', number: 'B10', status: 'available' },
-    { id: 'B11', number: 'B11', status: 'occupied' },
+    { id: 'B10', number: 'B10', status: 'unknown' },
+    { id: 'B11', number: 'B11', status: 'unknown' },
   ]);
 
   // Calculate status message based on availability
@@ -123,7 +124,7 @@ function ParkingLots({ onSelectLot, isDarkMode, setIsDarkMode }) {
           setLots([{
             id: 1,
             name: data.parkingLotName,
-            location: "Maybank",
+            location: "F-12",
             totalSpots: data.totalSpots,
             availableSpots: data.freeSpots,
           }]);
@@ -212,7 +213,7 @@ function ParkingLots({ onSelectLot, isDarkMode, setIsDarkMode }) {
                         isDarkMode ? 'text-blue-400' : 'text-blue-600'
                       } mb-6 text-2xl font-semibold`}
                     >
-                      Pilot Lot Overview
+                      Parking Lot Overview
                     </h2>
 
                     <div className="space-y-6">
@@ -252,76 +253,6 @@ function ParkingLots({ onSelectLot, isDarkMode, setIsDarkMode }) {
                         </span>
                       </div>
 
-                      {/* Meta Info */}
-                      <p
-                        className={`text-sm ${
-                          isDarkMode ? 'text-gray-500' : 'text-gray-500'
-                        }`}
-                      >
-                        Updated 12s ago · Computer vision · No video stored
-                      </p>
-
-                      {/* Mini-map */}
-                      <div
-                        className={`rounded-lg p-4 ${
-                          isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
-                        }`}
-                      >
-                        <div className="flex flex-col gap-1.5">
-                          {/* Row A1 Mini */}
-                          <div className="flex gap-1">
-                            {rowA1.slice(0, 8).map((spot) => (
-                              <div
-                                key={spot.id}
-                                className={`w-3 h-4 rounded-sm ${
-                                  spot.status === 'available'
-                                    ? 'bg-green-500'
-                                    : spot.status === 'occupied'
-                                    ? 'bg-red-500'
-                                    : 'bg-gray-500'
-                                }`}
-                              />
-                            ))}
-                          </div>
-                          {/* Row A2 Mini */}
-                          <div className="flex gap-1">
-                            {rowA2.slice(0, 8).map((spot) => (
-                              <div
-                                key={spot.id}
-                                className={`w-3 h-4 rounded-sm ${
-                                  spot.status === 'available'
-                                    ? 'bg-green-500'
-                                    : spot.status === 'occupied'
-                                    ? 'bg-red-500'
-                                    : 'bg-gray-500'
-                                }`}
-                              />
-                            ))}
-                          </div>
-                          {/* Drive lane */}
-                          <div
-                            className={`h-2 ${
-                              isDarkMode ? 'bg-gray-800' : 'bg-gray-300'
-                            } rounded-sm`}
-                          />
-                          {/* Row B Mini */}
-                          <div className="flex gap-1">
-                            {rowB.slice(0, 8).map((spot) => (
-                              <div
-                                key={spot.id}
-                                className={`w-3 h-4 rounded-sm ${
-                                  spot.status === 'available'
-                                    ? 'bg-green-500'
-                                    : spot.status === 'occupied'
-                                    ? 'bg-red-500'
-                                    : 'bg-gray-500'
-                                }`}
-                              />
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
                       {/* View Spot Map Button */}
                       <motion.button
                         onClick={() => onSelectLot(lot.id)}
@@ -339,7 +270,7 @@ function ParkingLots({ onSelectLot, isDarkMode, setIsDarkMode }) {
           </div>
 
           {/* WebSocket Connection Status */}
-          <div className="fixed top-8 right-8">
+          <div className="fixed top-20 right-8">
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}

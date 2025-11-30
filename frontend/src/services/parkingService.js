@@ -104,10 +104,10 @@ export const getParkingLots = async () => {
     return [
       {
         id: 1,
-        name: 'Lot 1',
-        location: 'Maybank',
-        totalSpots: 12,
-        availableSpots: 5,
+        name: 'Lot A',
+        location: 'F-12',
+        totalSpots: 84,
+        availableSpots: 0,
       },
     ];
   }

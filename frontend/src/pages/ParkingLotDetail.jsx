@@ -6,26 +6,15 @@ import { HorizontalParkingSpot } from "../components/HorizontalParkingSpot";
 
 function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
   // Generate 280 parking spots (10 columns with 28 spots each: 401-680)
+  // All set to 'unknown' (gray) until CV model sends real data
   const generateAngledParkingSpots = () => {
     const spots = [];
-    const statuses = ['available', 'occupied', 'unknown'];
     
     for (let i = 1; i <= 280; i++) {
-      // Distribute statuses: ~60% available, ~30% occupied, ~10% unknown
-      let status;
-      const rand = Math.random();
-      if (rand < 0.6) {
-        status = 'available';
-      } else if (rand < 0.9) {
-        status = 'occupied';
-      } else {
-        status = 'unknown';
-      }
-      
       spots.push({
         id: `${400 + i}`,
         number: `${400 + i}`,
-        status: status,
+        status: 'unknown', // All gray until real data comes in
       });
     }
     
@@ -34,18 +23,18 @@ function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
 
   const [angledParkingSpots, setAngledParkingSpots] = useState(generateAngledParkingSpots());
   const [parkingSpots, setParkingSpots] = useState([
-    { id: 1, number: "A1", status: "available" },
-    { id: 2, number: "A2", status: "occupied" },
+    { id: 1, number: "A1", status: "unknown" },
+    { id: 2, number: "A2", status: "unknown" },
     { id: 3, number: "A3", status: "unknown" },
-    { id: 4, number: "A4", status: "available" },
-    { id: 5, number: "A5", status: "occupied" },
-    { id: 6, number: "A6", status: "available" },
-    { id: 7, number: "B1", status: "available" },
+    { id: 4, number: "A4", status: "unknown" },
+    { id: 5, number: "A5", status: "unknown" },
+    { id: 6, number: "A6", status: "unknown" },
+    { id: 7, number: "B1", status: "unknown" },
     { id: 8, number: "B2", status: "unknown" },
-    { id: 9, number: "B3", status: "occupied" },
-    { id: 10, number: "B4", status: "available" },
+    { id: 9, number: "B3", status: "unknown" },
+    { id: 10, number: "B4", status: "unknown" },
     { id: 11, number: "B5", status: "unknown" },
-    { id: 12, number: "B6", status: "occupied" },
+    { id: 12, number: "B6", status: "unknown" },
   ]);
 
   // Helper to get spots for each band/column
@@ -73,7 +62,7 @@ function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
 
   const lot = {
     id: 1,
-    name: "Lot A – Pilot Lot",
+    name: "Lot A",
     location: "Faculty/Staff",
     totalSpots: angledParkingSpots.length,
     availableSpots: angledParkingSpots.filter((s) => s.status === 'available').length,
@@ -124,7 +113,7 @@ function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
               isDarkMode ? "text-gray-500" : "text-gray-500"
             }`}
           >
-            {lot.availableSpots} / {lot.totalSpots} spaces free · Updated 12s ago · Computer-vision only, no video shown
+            {lot.availableSpots} / {lot.totalSpots} spaces free 
           </p>
         </div>
 

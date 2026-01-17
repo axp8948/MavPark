@@ -16,7 +16,6 @@ public class ParkingService {
 
     public void updateParkingData(ParkingUpdateRequest request) {
         this.currentStatus = request;
-
         simpMessagingTemplate.convertAndSend("/topic/parking", request);
     }
 

@@ -1,5 +1,7 @@
 package com.mavpark.dto;
 
+import java.util.List;
+
 public class ParkingUpdateRequest {
 
     private String parkingLotName;
@@ -7,7 +9,9 @@ public class ParkingUpdateRequest {
     private int freeSpots;
     private int occupiedSpots;
 
-    // Getters and Setters
+    // NEW
+    private List<ParkingSpotStatus> spots;
+
     public String getParkingLotName() {
         return parkingLotName;
     }
@@ -38,5 +42,14 @@ public class ParkingUpdateRequest {
 
     public void setOccupiedSpots(int occupiedSpots) {
         this.occupiedSpots = occupiedSpots;
+    }
+
+    // NEW
+    public List<ParkingSpotStatus> getSpots() {
+        return spots;
+    }
+
+    public void setSpots(List<ParkingSpotStatus> spots) {
+        this.spots = spots;
     }
 }

@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { ArrowLeft } from "lucide-react";
 import { getParkingSpotsByLot } from "../services/parkingService";
 import { HorizontalParkingSpot } from "../components/HorizontalParkingSpot";
+import { useWebSocket } from "../hooks/useWebSocket";
 
 function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
   // Generate 280 parking spots (10 columns with 28 spots each: 401-680)
@@ -22,51 +23,112 @@ function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
   };
 
   const [angledParkingSpots, setAngledParkingSpots] = useState(generateAngledParkingSpots());
-  const [parkingSpots, setParkingSpots] = useState([
-    { id: 1, number: "A1", status: "unknown" },
-    { id: 2, number: "A2", status: "unknown" },
-    { id: 3, number: "A3", status: "unknown" },
-    { id: 4, number: "A4", status: "unknown" },
-    { id: 5, number: "A5", status: "unknown" },
-    { id: 6, number: "A6", status: "unknown" },
-    { id: 7, number: "B1", status: "unknown" },
-    { id: 8, number: "B2", status: "unknown" },
-    { id: 9, number: "B3", status: "unknown" },
-    { id: 10, number: "B4", status: "unknown" },
-    { id: 11, number: "B5", status: "unknown" },
-    { id: 12, number: "B6", status: "unknown" },
-  ]);
+
+  // WebSocket integration - receives parking data with spots array
+  const { parkingData } = useWebSocket({
+    autoConnect: true,
+    autoSubscribe: true,
+  });
+
+  // Lot info state
+  const [lot, setLot] = useState({
+    id: 1,
+    name: "Lot A",
+    location: "Faculty/Staff",
+    totalSpots: angledParkingSpots.length,
+    availableSpots: angledParkingSpots.filter((s) => s.status === 'available').length,
+  });
+
+  // Helper to convert backend status to component status
+  const mapStatus = (backendStatus) => {
+    if (backendStatus === 'free') return 'available';
+    if (backendStatus === 'occupied') return 'occupied';
+    return 'unknown';
+  };
+
+  // Update spots when WebSocket receives data from backend
+  useEffect(() => {
+    if (Array.isArray(parkingData?.spots)) {
+      console.log('Received parking data with spots:', parkingData);
+      
+      // Derive counts from the spots array so header matches the map
+      const totalFromSpots = parkingData.spots.length;
+      const freeFromSpots = parkingData.spots.filter(
+        (spot) => spot.status === "free"
+      ).length;
+
+      // Update lot info
+      setLot((prevLot) => ({
+        id: 1,
+        name: parkingData.parkingLotName || prevLot.name,
+        location: prevLot.location,
+        // Prefer derived total from spots, fall back to backend total if needed
+        totalSpots: totalFromSpots || parkingData.totalSpots || prevLot.totalSpots,
+        // Always use the derived free count so it matches green spots on the map
+        availableSpots: freeFromSpots,
+      }));
+
+      // Create a map of spotId -> status for quick lookup
+      const spotsMap = new Map();
+      parkingData.spots.forEach((spot) => {
+        spotsMap.set(spot.spotId.toString(), mapStatus(spot.status));
+      });
+
+      // Update angled parking spots
+      setAngledParkingSpots((prevSpots) => {
+        return prevSpots.map((spot) => {
+          const spotNumber = spot.number;
+          const status = spotsMap.get(spotNumber);
+          
+          // If this spot exists in backend data, update its status
+          if (status) {
+            return {
+              ...spot,
+              status: status,
+            };
+          }
+          
+          // If spot is not in backend data (spots beyond what backend sends), set to unknown (gray)
+          // Backend sends data for spots 401-497, anything beyond stays unknown
+          const spotNum = Number.parseInt(spotNumber, 10);
+          if (spotNum > 497) {
+            return {
+              ...spot,
+              status: 'unknown', // Explicitly gray for spots beyond backend data range
+            };
+          }
+          
+          // For spots 401-497 that don't have data, keep as unknown
+          return {
+            ...spot,
+            status: 'unknown',
+          };
+        });
+      });
+    }
+  }, [parkingData]);
 
   // Helper to get spots for each band/column
   const getBandSpots = (startNum, endNum) => {
     return angledParkingSpots.filter((spot) => {
-      const num = parseInt(spot.number, 10);
+      const num = Number.parseInt(spot.number, 10);
       return num >= startNum && num <= endNum;
     });
   };
 
-  // Fetch spots when lot is selected
+  // Fetch spots when lot is selected (fallback for initial load)
   useEffect(() => {
     if (selectedLot) {
       getParkingSpotsByLot(selectedLot)
         .then((data) => {
-          setParkingSpots(data);
           // If data has the angled spots format, update those too
-          if (data && data.length > 0 && data[0].number && parseInt(data[0].number) >= 401) {
+          if (data && data.length > 0 && data[0].number && Number.parseInt(data[0].number, 10) >= 401) {
             setAngledParkingSpots(data);
           }
         })
         .catch((err) => console.error("Error fetching spots:", err));
     }
   }, [selectedLot]);
-
-  const lot = {
-    id: 1,
-    name: "Lot A",
-    location: "Faculty/Staff",
-    totalSpots: angledParkingSpots.length,
-    availableSpots: angledParkingSpots.filter((s) => s.status === 'available').length,
-  };
 
   return (
     <motion.div
@@ -109,9 +171,7 @@ function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
             Live parking availability for {lot.location} Lot
           </p>
           <p
-            className={`text-sm ${
-              isDarkMode ? "text-gray-500" : "text-gray-500"
-            }`}
+            className="text-sm text-gray-500"
           >
             {lot.availableSpots} / {lot.totalSpots} spaces free 
           </p>

@@ -189,7 +189,7 @@ def checkSpaces(img, imgThres):
         if count < 900:
             status = "free"
             color = (0, 200, 0)
-            thic = 5
+            thic = 2
             spaces += 1
         else:
             status = "occupied"
@@ -210,8 +210,8 @@ def checkSpaces(img, imgThres):
         # ============================
         text_x, text_y = int(cx - w / 3), int(cy - 5)
 
-        cv2.putText(img, f"{spot_id}", (text_x, text_y),
-                    cv2.FONT_HERSHEY_PLAIN, 1.2, (255,255,255), 2)
+        # cv2.putText(img, f"{spot_id}", (text_x, text_y),
+        #             cv2.FONT_HERSHEY_PLAIN, 1.2, (255,255,255), 2)
 
         cv2.putText(img, f"{count}", (text_x, text_y + 20),
                     cv2.FONT_HERSHEY_PLAIN, 1.2, color, 2)

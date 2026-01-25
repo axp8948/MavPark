@@ -31,3 +31,9 @@ config.json
 !*.jpeg
 !*.mp4
 !*.mov
+
+
+# Maven / Java build output
+spring-backend/target/
+target/
+*.class

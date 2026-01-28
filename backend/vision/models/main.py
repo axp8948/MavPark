@@ -98,7 +98,7 @@ def checkSpaces(img, imgThres):
         else:
             status = "free"
             color = (0, 200, 0)
-            thickness = 4
+            thic = 2
             spaces += 1
 
         spot_status_list.append({
@@ -106,16 +106,19 @@ def checkSpaces(img, imgThres):
             "status": status
         })
 
-        cv2.drawContours(img, [box], 0, color, thickness)
-        cv2.putText(
-            img,
-            f"{white_ratio:.2f}",
-            (cx - w // 3, cy),
-            cv2.FONT_HERSHEY_PLAIN,
-            1.2,
-            color,
-            2
-        )
+        # Draw bounding box
+        cv2.drawContours(img, [box], 0, color, thic)
+
+        # ============================
+        # Show Spot Number + Threshold
+        # ============================
+        text_x, text_y = int(cx - w / 3), int(cy - 5)
+
+        # cv2.putText(img, f"{spot_id}", (text_x, text_y),
+        #             cv2.FONT_HERSHEY_PLAIN, 1.2, (255,255,255), 2)
+
+        cv2.putText(img, f"{count}", (text_x, text_y + 20),
+                    cv2.FONT_HERSHEY_PLAIN, 1.2, color, 2)
 
     total = len(posList)
     occupied = total - spaces

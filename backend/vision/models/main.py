@@ -1,75 +1,174 @@
+# import cv2
+# import pickle
+# import cvzone
+# import numpy as np
+# import time
+# from send_data import send_to_backend   # separate backend module
+
+# cap = cv2.VideoCapture('carPark.MOV')
+
+# # Load positions from your advanced spot picker
+# with open('CarParkPos', 'rb') as f:
+#     posList = pickle.load(f)
+
+# # --- SCALE COORDINATES TO MATCH VIDEO DIMENSIONS ---
+# # Picker image size → 3520x1980
+# # Video size → 1920x1080
+# scale_x = 1920 / 3520
+# scale_y = 1080 / 1980
+# posList = [(int(cx * scale_x), int(cy * scale_y), angle,
+#             int(w * scale_x), int(h * scale_y))
+#            for (cx, cy, angle, w, h) in posList]
+
+
+# def empty(a): pass
+
+
+# cv2.namedWindow("Controls")
+# cv2.resizeWindow("Controls", 640, 240)
+# cv2.createTrackbar("Lighting", "Controls", 0, 50, empty)
+# cv2.createTrackbar("Brightness", "Controls", 0, 50, empty)
+# cv2.createTrackbar("Smoothing", "Controls", 0, 50, empty)
+
+# # Set initial optimized slider values
+# cv2.setTrackbarPos("Lighting", "Controls", 50)
+# cv2.setTrackbarPos("Brightness", "Controls", 16)
+# cv2.setTrackbarPos("Smoothing", "Controls", 5)
+
+
+# # MODIFIED TO SEND EACH SPOT STATUS
+# def checkSpaces(img, imgThres):
+#     spaces = 0
+#     spot_status_list = []
+
+#     for idx, (cx, cy, angle, w, h) in enumerate(posList):
+#         rect = ((cx, cy), (w, h), angle)
+#         box = np.intp(cv2.boxPoints(rect))
+
+#         # Mask each parking ROI
+#         mask = np.zeros(imgThres.shape, dtype=np.uint8)
+#         cv2.drawContours(mask, [box], 0, 255, -1)
+#         imgCrop = cv2.bitwise_and(imgThres, mask)
+#         count = cv2.countNonZero(imgCrop)
+
+#         # Classification
+#         if count < 900:
+#             status = "free"
+#             color = (0, 200, 0)
+#             thic = 5
+#             spaces += 1
+#         else:
+#             status = "occupied"
+#             color = (0, 0, 200)
+#             thic = 2
+
+#         # Append spot-level status (starting IDs at 401)
+#         spot_status_list.append({
+#             "spotId": 401 + idx,
+#             "status": status
+#         })
+
+#         # Draw overlay
+#         cv2.drawContours(img, [box], 0, color, thic)
+#         cx_text, cy_text = int(cx - w / 4), int(cy)
+#         cv2.putText(img, str(count), (cx_text, cy_text),
+#                     cv2.FONT_HERSHEY_PLAIN, 1, color, 2)
+
+#     total = len(posList)
+#     occupied = total - spaces
+#     cvzone.putTextRect(img, f'Free: {spaces}/{total}', (50, 60),
+#                        thickness=3, offset=20, colorR=(0, 200, 0))
+
+#     return total, spaces, occupied, spot_status_list
+
+
+
+# # --- Throttling setup for backend updates ---
+# last_sent = 0        # timestamp of last update
+# interval = 3         # seconds between updates
+
+# # --- Main loop ---
+# while True:
+#     success, img = cap.read()
+#     if not success:
+#         cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+#         continue
+
+#     imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+#     imgBlur = cv2.GaussianBlur(imgGray, (3, 3), 1)
+
+#     val1 = cv2.getTrackbarPos("Lighting", "Controls")
+#     val2 = cv2.getTrackbarPos("Brightness", "Controls")
+#     val3 = cv2.getTrackbarPos("Smoothing", "Controls")
+#     if val1 % 2 == 0: val1 += 1
+#     if val3 % 2 == 0: val3 += 1
+
+#     imgThres = cv2.adaptiveThreshold(imgBlur, 255,
+#                                      cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+#                                      cv2.THRESH_BINARY_INV, val1, val2)
+#     imgThres = cv2.medianBlur(imgThres, val3)
+#     kernel = np.ones((3, 3), np.uint8)
+#     imgThres = cv2.dilate(imgThres, kernel, iterations=1)
+
+#     total, free, occupied, spot_status_list = checkSpaces(img, imgThres)
+
+#     # --- Send data every 3 seconds ---
+#     current_time = time.time()
+#     if current_time - last_sent >= interval:
+#         send_to_backend("Lot A", total, free, occupied, spot_status_list)
+#         last_sent = current_time
+
+#     # --- Display ---
+#     cv2.imshow("Threshold", imgThres)
+#     cv2.imshow("Image", img)
+
+#     key = cv2.waitKey(10)
+#     if key == ord('q'):
+#         break
+
+# cv2.destroyAllWindows()
+
+
+
+
+
+
+# SPOT ID ALGORTIHM
+
 import cv2
 import pickle
 import cvzone
 import numpy as np
 import time
-from send_data import send_to_backend
+from send_data import send_to_backend   # separate backend module
 
-# =========================
-# VIDEO SOURCE
-# =========================
 cap = cv2.VideoCapture('carPark.MOV')
 
-# =========================
-# LOAD & SCALE SPOT COORDINATES
-# =========================
+# Load positions from your advanced spot picker
 with open('CarParkPos', 'rb') as f:
     posList = pickle.load(f)
 
-PHOTO_W, PHOTO_H = 3520, 1980
-VIDEO_W, VIDEO_H = 1920, 1080
+# --- SCALE COORDINATES TO MATCH VIDEO DIMENSIONS ---
+scale_x = 1920 / 3520
+scale_y = 1080 / 1980
+posList = [(int(cx * scale_x), int(cy * scale_y), angle,
+            int(w * scale_x), int(h * scale_y))
+           for (cx, cy, angle, w, h) in posList]
 
-scale_x = VIDEO_W / PHOTO_W
-scale_y = VIDEO_H / PHOTO_H
-
-posList = [
-    (
-        int(round(cx * scale_x)),
-        int(round(cy * scale_y)),
-        angle,
-        int(round(w * scale_x)),
-        int(round(h * scale_y))
-    )
-    for (cx, cy, angle, w, h) in posList
-]
-
-# =========================
-# UI TRACKBARS
-# =========================
 def empty(a): pass
 
-cv2.namedWindow("Vals")
-cv2.resizeWindow("Vals", 640, 400)
+cv2.namedWindow("Controls")
+cv2.resizeWindow("Controls", 640, 240)
+cv2.createTrackbar("Lighting", "Controls", 0, 50, empty)
+cv2.createTrackbar("Brightness", "Controls", 0, 50, empty)
+cv2.createTrackbar("Smoothing", "Controls", 0, 50, empty)
 
-cv2.createTrackbar("BlockSize", "Vals", 6, 50, empty)
-cv2.createTrackbar("C", "Vals", 7, 50, empty)
-cv2.createTrackbar("Median", "Vals", 5, 50, empty)
+cv2.setTrackbarPos("Lighting", "Controls", 50)
+cv2.setTrackbarPos("Brightness", "Controls", 16)
+cv2.setTrackbarPos("Smoothing", "Controls", 5)
 
-cv2.createTrackbar("CannyLow", "Vals", 117, 255, empty)
-cv2.createTrackbar("CannyHigh", "Vals", 167, 255, empty)
 
-cv2.createTrackbar("Near%", "Vals", 6, 40, empty)
-cv2.createTrackbar("Mid%", "Vals", 8, 40, empty)
-cv2.createTrackbar("Far%", "Vals", 15, 40, empty)
-
-# =========================
-# ROW-BASED THRESHOLDING
-# =========================
-def get_row_threshold(cy):
-    near_th = cv2.getTrackbarPos("Near%", "Vals") / 100
-    mid_th  = cv2.getTrackbarPos("Mid%",  "Vals") / 100
-    far_th  = cv2.getTrackbarPos("Far%",  "Vals") / 100
-
-    if cy < VIDEO_H * 0.33:
-        return far_th
-    elif cy < VIDEO_H * 0.66:
-        return mid_th
-    else:
-        return near_th
-
-# =========================
-# PARKING CHECK FUNCTION
-# =========================
+# === UPDATED TO SHOW SPOT NUMBER + THRESHOLD VALUE ===
 def checkSpaces(img, imgThres):
     spaces = 0
     spot_status_list = []
@@ -80,27 +179,24 @@ def checkSpaces(img, imgThres):
         rect = ((cx, cy), (w, h), angle)
         box = np.intp(cv2.boxPoints(rect))
 
+        # Mask each parking ROI
         mask = np.zeros(imgThres.shape, dtype=np.uint8)
         cv2.drawContours(mask, [box], 0, 255, -1)
-
         imgCrop = cv2.bitwise_and(imgThres, mask)
+        count = cv2.countNonZero(imgCrop)
 
-        roi_area = max(w * h, 1)
-        white_pixels = cv2.countNonZero(imgCrop)
-        white_ratio = white_pixels / roi_area
-
-        TH = get_row_threshold(cy)
-
-        if white_ratio > TH:
-            status = "occupied"
-            color = (0, 0, 200)
-            thickness = 2
-        else:
+        # Classification
+        if count < 900:
             status = "free"
             color = (0, 200, 0)
             thic = 2
             spaces += 1
+        else:
+            status = "occupied"
+            color = (0, 0, 200)
+            thic = 2
 
+        # Append for backend
         spot_status_list.append({
             "spotId": spot_id,
             "status": status
@@ -123,26 +219,19 @@ def checkSpaces(img, imgThres):
     total = len(posList)
     occupied = total - spaces
 
-    cvzone.putTextRect(
-        img,
-        f"Free: {spaces}/{total}",
-        (50, 60),
-        thickness=3,
-        offset=20,
-        colorR=(0, 200, 0)
-    )
+    cvzone.putTextRect(img, f'Free: {spaces}/{total}', (50, 60),
+                       thickness=3, offset=20, colorR=(0, 200, 0))
 
     return total, spaces, occupied, spot_status_list
 
-# =========================
-# BACKEND THROTTLING
-# =========================
-last_sent = 0
-interval = 3  # seconds
 
-# =========================
-# MAIN LOOP
-# =========================
+
+# --- Throttling setup for backend updates ---
+last_sent = 0
+interval = 3
+
+
+# --- Main Loop ---
 while True:
     success, img = cap.read()
     if not success:
@@ -152,41 +241,32 @@ while True:
     imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     imgBlur = cv2.GaussianBlur(imgGray, (3, 3), 1)
 
-    blockSize = cv2.getTrackbarPos("BlockSize", "Vals")
-    C = cv2.getTrackbarPos("C", "Vals")
-    median_k = cv2.getTrackbarPos("Median", "Vals")
+    val1 = cv2.getTrackbarPos("Lighting", "Controls")
+    val2 = cv2.getTrackbarPos("Brightness", "Controls")
+    val3 = cv2.getTrackbarPos("Smoothing", "Controls")
+    if val1 % 2 == 0: val1 += 1
+    if val3 % 2 == 0: val3 += 1
 
-    cannyLow = cv2.getTrackbarPos("CannyLow", "Vals")
-    cannyHigh = cv2.getTrackbarPos("CannyHigh", "Vals")
-
-    if blockSize % 2 == 0: blockSize += 1
-    if median_k % 2 == 0: median_k += 1
-
-    imgAdaptive = cv2.adaptiveThreshold(
-        imgBlur,
-        255,
-        cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-        cv2.THRESH_BINARY_INV,
-        blockSize,
-        C
-    )
-
-    imgAdaptive = cv2.medianBlur(imgAdaptive, median_k)
-    imgCanny = cv2.Canny(imgBlur, cannyLow, cannyHigh)
-
-    imgThres = cv2.addWeighted(imgAdaptive, 1, imgCanny, 1, 0)
+    imgThres = cv2.adaptiveThreshold(imgBlur, 255,
+                                     cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                                     cv2.THRESH_BINARY_INV, val1, val2)
+    imgThres = cv2.medianBlur(imgThres, val3)
+    kernel = np.ones((3, 3), np.uint8)
+    imgThres = cv2.dilate(imgThres, kernel, iterations=1)
 
     total, free, occupied, spot_status_list = checkSpaces(img, imgThres)
 
+    # Send updates every 3 seconds
     current_time = time.time()
     if current_time - last_sent >= interval:
         send_to_backend("Lot A", total, free, occupied, spot_status_list)
         last_sent = current_time
 
+    cv2.imshow("Threshold", imgThres)
     cv2.imshow("Image", img)
-    cv2.imshow("Threshold Fusion", imgThres)
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    if cv2.waitKey(10) == ord('q'):
         break
 
 cv2.destroyAllWindows()
+

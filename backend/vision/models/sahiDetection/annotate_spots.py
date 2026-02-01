@@ -1,15 +1,20 @@
 """
-Parking Spot Annotation Tool
-Click to define parking spot boundaries, save to JSON for occupancy detection.
+Parking Spot Annotation Tool (Video Snapshot Version)
 
-Controls:
-- Left Click: Add point to current spot polygon
-- Right Click: Complete current spot and start new one
-- 'u': Undo last point
-- 'd': Delete last completed spot
-- 's': Save spots to JSON
-- 'r': Reset all spots
-- 'q' or ESC: Quit (will prompt to save)
+Controls (Preview Mode):
+- SPACE: Capture current frame for annotation
+- F: Jump forward 30 frames
+- B: Jump backward 30 frames
+- Q / ESC: Quit
+
+Controls (Annotation Mode):
+- Left Click: Add point
+- Right Click: Complete spot
+- U: Undo last point
+- D: Delete last spot
+- S: Save
+- R: Reset
+- Q / ESC: Quit
 """
 
 import cv2
@@ -18,30 +23,24 @@ import numpy as np
 from pathlib import Path
 
 # =========================================================
-# CONFIGURATION (EDIT ONLY THIS SECTION)
+# CONFIGURATION
 # =========================================================
-IMAGE_PATH = "carPark.jpg"          # Image to annotate
-OUTPUT_JSON = "parking_spots1.json"       # Output annotation file
-
-USE_RECTANGLE_MODE = False               # True = rectangle mode, False = polygon mode
+VIDEO_PATH = "IMG_9798.MOV"
+OUTPUT_JSON = "parking_spots_9798.json"
+USE_RECTANGLE_MODE = False
 # =========================================================
 
 
 class ParkingSpotAnnotator:
-    def __init__(self, image_path, output_json):
-        self.image_path = Path(image_path)
+    def __init__(self, frame, output_json):
+        self.original_image = frame
+        self.image = frame.copy()
         self.output_json = Path(output_json)
-        self.original_image = cv2.imread(str(self.image_path))
 
-        if self.original_image is None:
-            raise ValueError(f"Could not load image: {image_path}")
-
-        self.image = self.original_image.copy()
         self.spots = []
         self.current_spot = []
         self.spot_counter = 1
 
-        # Load existing spots if file exists
         if self.output_json.exists():
             self.load_spots()
 
@@ -58,10 +57,10 @@ class ParkingSpotAnnotator:
             print(f"Loaded {len(self.spots)} existing spots")
 
     def save_spots(self):
+        h, w = self.original_image.shape[:2]
         data = {
-            "image_path": str(self.image_path),
-            "image_width": self.original_image.shape[1],
-            "image_height": self.original_image.shape[0],
+            "image_width": w,
+            "image_height": h,
             "total_spots": len(self.spots),
             "spots": self.spots,
         }
@@ -84,13 +83,10 @@ class ParkingSpotAnnotator:
                 self.spot_counter += 1
                 self.current_spot = []
                 self.update_display()
-            else:
-                print("Need at least 3 points to create a spot")
 
     def update_display(self):
         self.image = self.original_image.copy()
 
-        # Draw completed spots
         for spot in self.spots:
             pts = np.array(spot["points"], dtype=np.int32)
             overlay = self.image.copy()
@@ -109,7 +105,6 @@ class ParkingSpotAnnotator:
                 2
             )
 
-        # Draw current spot
         if self.current_spot:
             pts = np.array(self.current_spot, dtype=np.int32)
             for pt in self.current_spot:
@@ -127,7 +122,7 @@ class ParkingSpotAnnotator:
             "Controls:",
             "Left Click: Add point",
             "Right Click: Complete spot",
-            "U: Undo | D: Delete last",
+            "U: Undo | D: Delete",
             "S: Save | R: Reset | Q: Quit"
         ]
 
@@ -140,16 +135,12 @@ class ParkingSpotAnnotator:
             y += 25
 
     def run(self):
-        print("=" * 50)
-        print("PARKING SPOT ANNOTATOR")
-        print("=" * 50)
         self.update_display()
-
         while True:
             cv2.imshow(self.window_name, self.image)
             key = cv2.waitKey(1) & 0xFF
 
-            if key == ord("q") or key == 27:
+            if key in (ord("q"), 27):
                 if self.spots:
                     print("Save before quitting? (y/n)")
                     if cv2.waitKey(0) & 0xFF == ord("y"):
@@ -169,71 +160,61 @@ class ParkingSpotAnnotator:
                 self.update_display()
 
             elif key == ord("r"):
-                print("Reset all spots? (y/n)")
-                if cv2.waitKey(0) & 0xFF == ord("y"):
-                    self.spots = []
-                    self.current_spot = []
-                    self.spot_counter = 1
-                    self.update_display()
+                self.spots = []
+                self.current_spot = []
+                self.spot_counter = 1
+                self.update_display()
 
         cv2.destroyAllWindows()
-        print(f"Final count: {len(self.spots)} spots")
 
 
 # =========================================================
-# QUICK RECTANGLE MODE
+# VIDEO SNAPSHOT PICKER
 # =========================================================
-def quick_rectangle_mode(image_path, output_json):
-    image = cv2.imread(str(image_path))
-    spots = []
-    points = []
-    counter = 1
+def capture_frame_from_video(video_path):
+    cap = cv2.VideoCapture(video_path)
+    if not cap.isOpened():
+        raise RuntimeError("Could not open video")
 
-    def mouse(event, x, y, flags, param):
-        nonlocal points, spots, counter
-        if event == cv2.EVENT_LBUTTONDOWN:
-            points.append([x, y])
-            if len(points) == 2:
-                x1, y1 = points[0]
-                x2, y2 = points[1]
-                spots.append({
-                    "id": f"spot_{counter:03d}",
-                    "points": [[x1, y1], [x2, y1], [x2, y2], [x1, y2]]
-                })
-                print(f"Added spot_{counter:03d}")
-                counter += 1
-                points = []
-
-    cv2.namedWindow("Rectangle Mode", cv2.WINDOW_NORMAL)
-    cv2.setMouseCallback("Rectangle Mode", mouse)
+    frame_idx = 0
 
     while True:
-        img = image.copy()
-        for s in spots:
-            pts = np.array(s["points"], dtype=np.int32)
-            cv2.polylines(img, [pts], True, (0, 255, 0), 2)
-
-        cv2.imshow("Rectangle Mode", img)
-        key = cv2.waitKey(1) & 0xFF
-
-        if key == ord("q"):
+        cap.set(cv2.CAP_PROP_POS_FRAMES, frame_idx)
+        ret, frame = cap.read()
+        if not ret:
             break
-        elif key == ord("s"):
-            json.dump({
-                "image_path": str(image_path),
-                "total_spots": len(spots),
-                "spots": spots
-            }, open(output_json, "w"), indent=2)
-            print(f"Saved {len(spots)} spots")
 
+        display = frame.copy()
+        cv2.putText(display, "SPACE: Capture | F/B: Seek | Q: Quit",
+                    (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                    (0, 255, 0), 2)
+
+        cv2.imshow("Video Preview", display)
+        key = cv2.waitKey(30) & 0xFF
+
+        if key == ord(" "):
+            cap.release()
+            cv2.destroyWindow("Video Preview")
+            return frame
+
+        elif key == ord("f"):
+            frame_idx += 30
+
+        elif key == ord("b"):
+            frame_idx = max(0, frame_idx - 30)
+
+        elif key in (ord("q"), 27):
+            break
+
+    cap.release()
     cv2.destroyAllWindows()
+    return None
 
 
 # =========================================================
 # ENTRY POINT
 # =========================================================
 if __name__ == "__main__":
-    if USE_RECTANGLE_MODE:
-        quick_rectangle_mode(IMAGE_PATH, OUTPUT_JSON)
-    else:
-        ParkingSpotAnnotator(IMAGE_PATH, OUTPUT_JSON).run()
+    frame = capture_frame_from_video(VIDEO_PATH)
+    if frame is not None:
+        ParkingSpotAnnotator(frame, OUTPUT_JSON).run()

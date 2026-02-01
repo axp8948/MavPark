@@ -8,8 +8,8 @@ from send_data import send_to_backend
 # =========================
 # CONFIG
 # =========================
-VIDEO_PATH = "carPark.MOV"
-SPOTS_JSON = "parking_spots1.json"
+VIDEO_PATH = "IMG_9798.MOV"
+SPOTS_JSON = "parking_spots_9798.json"
 LOT_NAME = "Lot A"
 SEND_INTERVAL = 3  # seconds
 

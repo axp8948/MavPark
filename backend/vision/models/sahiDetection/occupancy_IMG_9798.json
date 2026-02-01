@@ -1,0 +1,482 @@
+{
+  "image_path": "sample_frame.jpg",
+  "image_width": 1920,
+  "image_height": 1080,
+  "total_spots": 118,
+  "occupied_spots": 85,
+  "free_spots": 33,
+  "occupancy": [
+    {
+      "spot_id": "spot_001",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_002",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_003",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_004",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_005",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_006",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_007",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_008",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_009",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_010",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_011",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_012",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_013",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_014",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_015",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_016",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_017",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_018",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_019",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_020",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_021",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_022",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_023",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_024",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_025",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_026",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_027",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_028",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_029",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_030",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_031",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_032",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_033",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_034",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_035",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_036",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_037",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_038",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_039",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_040",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_041",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_042",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_043",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_044",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_045",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_046",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_047",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_048",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_049",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_050",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_051",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_052",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_053",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_054",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_055",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_056",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_057",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_058",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_059",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_060",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_061",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_062",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_063",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_064",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_065",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_066",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_067",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_068",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_069",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_070",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_071",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_072",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_073",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_074",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_075",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_076",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_077",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_078",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_079",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_080",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_081",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_082",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_083",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_084",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_085",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_086",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_087",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_088",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_089",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_090",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_091",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_092",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_093",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_094",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_095",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_096",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_097",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_098",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_099",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_100",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_101",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_102",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_103",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_104",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_105",
+      "occupied": false
+    },
+    {
+      "spot_id": "spot_106",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_107",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_108",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_109",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_110",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_111",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_112",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_113",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_114",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_115",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_116",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_117",
+      "occupied": true
+    },
+    {
+      "spot_id": "spot_118",
+      "occupied": true
+    }
+  ]
+}

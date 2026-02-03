@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Navigation } from "lucide-react";
 import { getParkingSpotsByLot } from "../services/parkingService";
 import { useWebSocket } from "../hooks/useWebSocket";
 import GoogleMapsParkingLot from '../components/GoogleMapsParkingLot';
-import { spotCoordinates } from '../data/spotCoordinates';
+import { spotCoordinates, lotCenter } from '../data/spotCoordinates';
 
 function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
   // Generate parking spots matching the 87 spots from GeoJSON (401-487)
@@ -135,6 +135,20 @@ function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
     // You can add a modal or tooltip here to show spot details
   };
 
+  // Handle "Get Directions" button click
+  // Opens Google Maps with directions from user's current location to the parking lot
+  const handleGetDirections = () => {
+    // Google Maps directions URL format
+    // This will open Google Maps app on mobile or web version on desktop
+    // The 'dir/?api=1&destination=' format automatically uses user's current location as origin
+    const destinationLat = lotCenter.lat;
+    const destinationLng = lotCenter.lng;
+    const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${destinationLat},${destinationLng}`;
+    
+    // Open in new tab/window
+    window.open(directionsUrl, '_blank');
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -161,25 +175,46 @@ function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
         } rounded-2xl p-8 shadow-lg border-2`}
       >
         <div className="mb-8">
-          <h2
-            className={`${
-              isDarkMode ? "text-blue-400" : "text-blue-600"
-            } mb-2 text-2xl font-semibold`}
-          >
-            {lot.name}
-          </h2>
-          <p
-            className={`${
-              isDarkMode ? "text-gray-400" : "text-gray-600"
-            } mb-1`}
-          >
-            Live parking availability for {lot.location} Lot
-          </p>
-          <p
-            className="text-sm text-gray-500"
-          >
-            {lot.availableSpots} / {lot.totalSpots} spaces free 
-          </p>
+          {/* Header section with lot name and get directions button */}
+          <div className="flex items-start justify-between mb-2">
+            <div>
+              <h2
+                className={`${
+                  isDarkMode ? "text-blue-400" : "text-blue-600"
+                } text-2xl font-semibold`}
+              >
+                {lot.name}
+              </h2>
+              <p
+                className={`${
+                  isDarkMode ? "text-gray-400" : "text-gray-600"
+                } mt-1`}
+              >
+                Live parking availability for {lot.location} Lot
+              </p>
+              <p
+                className="text-sm text-gray-500 mt-1"
+              >
+                {lot.availableSpots} / {lot.totalSpots} spaces free 
+              </p>
+            </div>
+            
+            {/* Get Directions Button */}
+            <motion.button
+              onClick={handleGetDirections}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
+                isDarkMode
+                  ? "bg-blue-600 hover:bg-blue-700 text-white"
+                  : "bg-blue-600 hover:bg-blue-700 text-white"
+              }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              aria-label="Get directions to parking lot"
+            >
+              <Navigation className="w-4 h-4" />
+              Get Directions
+            </motion.button>
+          </div>
         </div>
 
         {/* Google Maps Parking Lot Visualization */}

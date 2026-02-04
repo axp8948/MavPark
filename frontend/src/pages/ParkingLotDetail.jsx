@@ -4,16 +4,19 @@ import { ArrowLeft, Navigation } from "lucide-react";
 import { getParkingSpotsByLot } from "../services/parkingService";
 import { useWebSocket } from "../hooks/useWebSocket";
 import GoogleMapsParkingLot from '../components/GoogleMapsParkingLot';
-import { spotCoordinates, lotCenter } from '../data/spotCoordinates';
+import { spotCoordinates, lotCenter, totalSpots, SPOT_ID_OFFSET } from '../data/spotCoordinates';
 
 function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
-  // Generate parking spots matching the 87 spots from GeoJSON (401-487)
+  // Generate parking spots matching the 273 spots from GeoJSON
+  // IDs start from 401 to match backend ID scheme (401-673)
   // All set to 'unknown' (orange) until CV model sends real data
   const generateParkingSpots = () => {
     const spots = [];
+    const startId = SPOT_ID_OFFSET + 1; // 401
+    const endId = SPOT_ID_OFFSET + totalSpots; // 673
     
-    // Generate spots 401-487 (87 spots total, matching spotCoordinates)
-    for (let i = 401; i <= 487; i++) {
+    // Generate spots 401-673 (273 spots total, matching spotCoordinates)
+    for (let i = startId; i <= endId; i++) {
       spots.push({
         id: `${i}`,
         number: `${i}`,
@@ -37,7 +40,7 @@ function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
     id: 1,
     name: "Lot A",
     location: "Faculty/Staff",
-    totalSpots: 87, // Matches our mapped spots
+    totalSpots: totalSpots, // Matches our mapped spots (273)
     availableSpots: 0,
   });
 
@@ -69,6 +72,7 @@ function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
       }));
 
       // Create a map of spotId -> status for quick lookup
+      // IDs now match directly (401-based)
       const spotsMap = new Map();
       parkingData.spots.forEach((spot) => {
         spotsMap.set(spot.spotId.toString(), mapStatus(spot.status));
@@ -105,11 +109,12 @@ function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
         .then((data) => {
           if (data && data.length > 0) {
             // Create a map of spotId -> status for quick lookup
+            // IDs now match directly (401-based)
             const spotsMap = new Map();
             data.forEach((spot) => {
-              const id = spot.spotId?.toString() || spot.id?.toString() || spot.number?.toString();
-              if (id) {
-                spotsMap.set(id, mapStatus(spot.status));
+              const spotId = spot.spotId || spot.id;
+              if (spotId) {
+                spotsMap.set(spotId.toString(), mapStatus(spot.status));
               }
             });
 

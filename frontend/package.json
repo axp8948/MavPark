@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-google-maps/api": "^2.20.8",
     "@stomp/stompjs": "^7.0.0",
     "lucide-react": "^0.548.0",
     "motion": "^12.23.24",

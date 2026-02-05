@@ -1,0 +1,75 @@
+# ===============================
+# OS / Editor
+# ===============================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ===============================
+# Node / Frontend
+# ===============================
+node_modules/
+dist/
+build/
+
+# ===============================
+# Java / Spring
+# ===============================
+target/
+*.class
+spring-backend/target/
+
+# ===============================
+# Environment / Secrets
+# ===============================
+.env
+.env.*
+secrets.json
+config.json
+
+# ===============================
+# Python
+# ===============================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.cache/
+
+venv/
+env/
+.venv/
+
+# ===============================
+# ML / CV Artifacts
+# ===============================
+yolov8n.pt
+*.pt                 # YOLO / model weights
+*.onnx
+*.tflite
+*.h5
+
+# Temporary images written by pipelines
+temp/
+tmp/
+*.log
+
+# ===============================
+# Generated Outputs
+# ===============================
+occupancy_*.json
+detections_*.json
+result_*.jpg
+occupancy_live.json
+
+# ===============================
+# Allow committed media (careful)
+# ===============================
+!*.png
+!*.jpg
+!*.jpeg
+!*.mp4
+!*.mov
+
+

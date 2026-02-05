@@ -44,6 +44,7 @@ env/
 # ===============================
 # ML / CV Artifacts
 # ===============================
+yolov8n.pt
 *.pt                 # YOLO / model weights
 *.onnx
 *.tflite
@@ -70,3 +71,5 @@ occupancy_live.json
 !*.jpeg
 !*.mp4
 !*.mov
+
+

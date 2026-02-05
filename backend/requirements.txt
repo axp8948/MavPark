@@ -1,0 +1,21 @@
+# ================================
+# MavPark Backend Requirements
+# Install with:
+#   pip install -r requirements.txt
+# ================================
+
+# Core Computer Vision & Math
+opencv-python>=4.8.0
+numpy>=1.24.0
+cvzone>=1.6.1
+
+# YOLOv8 + SAHI (Vehicle Detection)
+ultralytics>=8.0.0
+sahi>=0.11.0
+shapely>=2.0.0
+
+# Environment Variable Management
+python-dotenv>=1.0.0
+
+# Networking / Data Upload
+requests>=2.32.0

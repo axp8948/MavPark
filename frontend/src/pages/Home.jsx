@@ -1,19 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { AnimatePresence } from "motion/react";
+import { useTheme } from "../context/ThemeContext";
 import ParkingLots from "./ParkingLots";
 import ParkingLotDetail from "./ParkingLotDetail";
 
 function Home() {
   const [selectedLot, setSelectedLot] = useState(null);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  // Load dark mode preference on mount
-  useEffect(() => {
-    const saved = localStorage.getItem("mavpark-darkMode");
-    if (saved !== null) {
-      setIsDarkMode(saved === "true");
-    }
-  }, []);
+  const { isDarkMode, setIsDarkMode } = useTheme();
 
   return (
     <div

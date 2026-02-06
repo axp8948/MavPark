@@ -175,8 +175,10 @@ function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
       </button>
 
       <div
-        className={`${
-          isDarkMode ? "bg-gray-800 border-blue-400" : "bg-white border-blue-100"
+        className={`backdrop-blur-sm ${
+          isDarkMode 
+            ? "bg-gray-800/90 border-blue-400" 
+            : "bg-white/80 border-blue-100"
         } rounded-2xl p-8 shadow-lg border-2`}
       >
         <div className="mb-8">

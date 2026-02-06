@@ -1,8 +1,8 @@
 {
   "parkingLotName": "Lot A",
   "totalSpots": 70,
-  "freeSpots": 30,
-  "occupiedSpots": 40,
+  "freeSpots": 29,
+  "occupiedSpots": 41,
   "spots": [
     {
       "spotId": "spot_001",
@@ -34,7 +34,7 @@
     },
     {
       "spotId": "spot_008",
-      "status": "free"
+      "status": "occupied"
     },
     {
       "spotId": "spot_009",
@@ -126,7 +126,7 @@
     },
     {
       "spotId": "spot_031",
-      "status": "occupied"
+      "status": "free"
     },
     {
       "spotId": "spot_032",
@@ -138,7 +138,7 @@
     },
     {
       "spotId": "spot_034",
-      "status": "free"
+      "status": "occupied"
     },
     {
       "spotId": "spot_035",
@@ -162,7 +162,7 @@
     },
     {
       "spotId": "spot_040",
-      "status": "free"
+      "status": "occupied"
     },
     {
       "spotId": "spot_041",
@@ -266,7 +266,7 @@
     },
     {
       "spotId": "spot_066",
-      "status": "occupied"
+      "status": "free"
     },
     {
       "spotId": "spot_067",
@@ -285,5 +285,5 @@
       "status": "occupied"
     }
   ],
-  "timestamp": 1769919237.999064
+  "timestamp": 1770319362.635894
 }

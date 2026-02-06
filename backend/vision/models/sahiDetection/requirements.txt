@@ -1,0 +1,8 @@
+# SAHI Vehicle Detector Requirements
+# Install: pip install -r requirements.txt
+
+ultralytics>=8.0.0      # YOLOv8 model
+sahi>=0.11.0            # Slicing Aided Hyper Inference
+opencv-python>=4.8.0    # Image/video processing
+numpy>=1.24.0           # Array operations
+shapely>=2.0.0          # Geometry calculations (for occupancy detection)

@@ -1,0 +1,289 @@
+{
+  "parkingLotName": "Lot A",
+  "totalSpots": 70,
+  "freeSpots": 29,
+  "occupiedSpots": 41,
+  "spots": [
+    {
+      "spotId": "spot_001",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_002",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_003",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_004",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_005",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_006",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_007",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_008",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_009",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_010",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_011",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_012",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_013",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_014",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_015",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_016",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_017",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_018",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_019",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_020",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_021",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_022",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_023",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_024",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_025",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_026",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_027",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_028",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_029",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_030",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_031",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_032",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_033",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_034",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_035",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_036",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_037",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_038",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_039",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_040",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_041",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_042",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_043",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_044",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_045",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_046",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_047",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_048",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_049",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_050",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_051",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_052",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_053",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_054",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_055",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_056",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_057",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_058",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_059",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_060",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_061",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_062",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_063",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_064",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_065",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_066",
+      "status": "free"
+    },
+    {
+      "spotId": "spot_067",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_068",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_069",
+      "status": "occupied"
+    },
+    {
+      "spotId": "spot_070",
+      "status": "occupied"
+    }
+  ],
+  "timestamp": 1770319362.635894
+}

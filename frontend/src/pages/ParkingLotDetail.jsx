@@ -4,26 +4,19 @@ import { ArrowLeft, Navigation } from "lucide-react";
 import { getParkingSpotsByLot } from "../services/parkingService";
 import { useWebSocket } from "../hooks/useWebSocket";
 import GoogleMapsParkingLot from '../components/GoogleMapsParkingLot';
-import { spotCoordinates, lotCenter, totalSpots, SPOT_ID_OFFSET } from '../data/spotCoordinates';
+import lotConfigs from '../data/lotConfigs';
 
 function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
-  // Generate parking spots matching the 273 spots from GeoJSON
-  // IDs start from 401 to match backend ID scheme (401-673)
-  // All set to 'unknown' (orange) until CV model sends real data
+  const lotConfig = lotConfigs[selectedLot] || lotConfigs[1];
+
   const generateParkingSpots = () => {
+    if (lotConfig.totalSpots === 0) return [];
     const spots = [];
-    const startId = SPOT_ID_OFFSET + 1; // 401
-    const endId = SPOT_ID_OFFSET + totalSpots; // 673
-    
-    // Generate spots 401-673 (273 spots total, matching spotCoordinates)
+    const startId = lotConfig.spotIdOffset + 1;
+    const endId = lotConfig.spotIdOffset + lotConfig.totalSpots;
     for (let i = startId; i <= endId; i++) {
-      spots.push({
-        id: `${i}`,
-        number: `${i}`,
-        status: 'unknown', // All unknown until real data comes in
-      });
+      spots.push({ id: `${i}`, number: `${i}`, status: 'unknown' });
     }
-    
     return spots;
   };
 
@@ -35,12 +28,11 @@ function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
     autoSubscribe: true,
   });
 
-  // Lot info state
   const [lot, setLot] = useState({
-    id: 1,
-    name: "Lot A",
-    location: "Faculty/Staff",
-    totalSpots: totalSpots, // Matches our mapped spots (273)
+    id: selectedLot,
+    name: lotConfig.name,
+    location: lotConfig.location,
+    totalSpots: lotConfig.totalSpots,
     availableSpots: 0,
   });
 
@@ -62,9 +54,8 @@ function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
         (spot) => spot.status === "free"
       ).length;
 
-      // Update lot info
       setLot((prevLot) => ({
-        id: 1,
+        id: selectedLot,
         name: parkingData.parkingLotName || prevLot.name,
         location: prevLot.location,
         totalSpots: totalFromSpots || prevLot.totalSpots,
@@ -146,8 +137,8 @@ function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
     // Google Maps directions URL format
     // This will open Google Maps app on mobile or web version on desktop
     // The 'dir/?api=1&destination=' format automatically uses user's current location as origin
-    const destinationLat = lotCenter.lat;
-    const destinationLng = lotCenter.lng;
+    const destinationLat = lotConfig.center.lat;
+    const destinationLng = lotConfig.center.lng;
     const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${destinationLat},${destinationLng}`;
     
     // Open in new tab/window
@@ -227,9 +218,13 @@ function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
         {/* Google Maps Parking Lot Visualization */}
         <GoogleMapsParkingLot
           spots={parkingSpots}
-          spotCoordinates={spotCoordinates}
+          spotCoordinates={lotConfig.spotCoordinates}
           lotName={lot.name}
           onSpotClick={handleSpotClick}
+          center={lotConfig.center}
+          overlayBounds={lotConfig.overlayBounds}
+          overlayImage={lotConfig.overlayImage}
+          zoom={lotConfig.zoom}
         />
       </div>
     </motion.div>

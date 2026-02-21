@@ -18,10 +18,10 @@ function ParkingLots({ onSelectLot, isDarkMode, setIsDarkMode }) {
     {
       id: 2,
       name: "Lot B",
-      location: "Coming Soon",
+      location: "F-10",
       totalSpots: 0,
       availableSpots: 0,
-      status: "upcoming",
+      status: "active",
     },
     {
       id: 3,

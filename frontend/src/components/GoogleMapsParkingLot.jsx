@@ -149,12 +149,15 @@ const GoogleMapsParkingLot = ({
           // Or if it's already a center point object, use it directly
           let center;
           if (Array.isArray(coords)) {
-            // Calculate center from polygon corners
+            // Polygon format: average the corners
             const avgLat = coords.reduce((sum, c) => sum + c.lat, 0) / coords.length;
             const avgLng = coords.reduce((sum, c) => sum + c.lng, 0) / coords.length;
             center = { lat: avgLat, lng: avgLng };
+          } else if (coords.lat !== undefined && coords.lng !== undefined) {
+            // Simple center-point format (from calibration tool)
+            center = { lat: coords.lat, lng: coords.lng };
           } else {
-            center = coords;
+            return null;
           }
 
           return (

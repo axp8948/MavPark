@@ -8,24 +8,10 @@ const containerStyle = {
   borderRadius: '12px',
 };
 
-// UTA Parking Lot F-12 Center (from exact coordinates)
-const defaultCenter = {
-  lat: 32.733149,  // Center latitude of F-12
-  lng: -97.111563, // Center longitude of F-12
+const DEFAULT_CENTER = {
+  lat: 32.733149,
+  lng: -97.111563,
 };
-
-// F-12 Parking Lot Overlay Bounds (exact coordinates from Google Earth)
-// NW: 32.733610, -97.112044 | NE: 32.733611, -97.111062
-// SW: 32.732694, -97.112063 | SE: 32.732686, -97.111080
-const overlayBounds = {
-  north: 32.733611,  // Top edge
-  south: 32.732686,  // Bottom edge
-  east: -97.111062,  // Right edge
-  west: -97.112063,  // Left edge
-};
-
-// Path to your Figma overlay image (place in public folder)
-const OVERLAY_IMAGE_URL = '/f12-overlay.png';
 
 // Color mapping for spot statuses
 const getSpotColor = (status) => {
@@ -42,7 +28,16 @@ const getSpotColor = (status) => {
   }
 };
 
-const GoogleMapsParkingLot = ({ spots, spotCoordinates, lotName, onSpotClick }) => {
+const GoogleMapsParkingLot = ({
+  spots,
+  spotCoordinates,
+  lotName,
+  onSpotClick,
+  center = DEFAULT_CENTER,
+  overlayBounds,
+  overlayImage,
+  zoom = 19,
+}) => {
   const [map, setMap] = useState(null);
 
   // Debug: Log spots and coordinates on mount/update
@@ -120,8 +115,8 @@ const GoogleMapsParkingLot = ({ spots, spotCoordinates, lotName, onSpotClick }) 
       {/* Google Map */}
       <GoogleMap
         mapContainerStyle={containerStyle}
-        center={defaultCenter}
-        zoom={19}
+        center={center}
+        zoom={zoom}
         onLoad={onLoad}
         onUnmount={onUnmount}
         mapTypeId="hybrid"
@@ -136,12 +131,13 @@ const GoogleMapsParkingLot = ({ spots, spotCoordinates, lotName, onSpotClick }) 
           tilt: 0, // Look straight down, no 3D tilt
         }}
       >
-        {/* Figma Blueprint Overlay - Your parking lot layout */}
-        <GroundOverlay
-          url={OVERLAY_IMAGE_URL}
-          bounds={overlayBounds}
-          opacity={0.85}
-        />
+        {overlayImage && overlayBounds && (
+          <GroundOverlay
+            url={overlayImage}
+            bounds={overlayBounds}
+            opacity={0.85}
+          />
+        )}
 
         {/* Render parking spots as circles/dots on top of the overlay */}
         {spots.map((spot) => {

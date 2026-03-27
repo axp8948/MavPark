@@ -15,7 +15,6 @@ import {
    ID NORMALIZATION
    Backend:  "spot_045"
    Frontend: "401" – "673"
-============================================================ */
 const normalizeSpotId = (spotId) => {
   if (typeof spotId === "number") return String(spotId);
 
@@ -35,6 +34,7 @@ function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
      INITIAL SPOT GENERATION (401–673)
   ============================================================ */
   const generateParkingSpots = () => {
+    if (lotConfig.totalSpots === 0) return [];
     const spots = [];
     const startId = SPOT_ID_OFFSET + 1;
     const endId = SPOT_ID_OFFSET + totalSpots;
@@ -215,9 +215,13 @@ function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
         {/* GOOGLE MAP */}
         <GoogleMapsParkingLot
           spots={parkingSpots}
-          spotCoordinates={spotCoordinates}
+          spotCoordinates={lotConfig.spotCoordinates}
           lotName={lot.name}
           onSpotClick={handleSpotClick}
+          center={lotConfig.center}
+          overlayBounds={lotConfig.overlayBounds}
+          overlayImage={lotConfig.overlayImage}
+          zoom={lotConfig.zoom}
         />
       </div>
     </motion.div>

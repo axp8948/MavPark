@@ -7,24 +7,28 @@ function AboutUs() {
   // Team members data
   const teamMembers = [
     {
-      name: "Team Member 1",
-      role: "Lead Developer",
-      description: "Full-stack developer specializing in real-time systems",
+      name: "Anmol Pandey",
+      description: "Full Stack Developer",
     },
     {
-      name: "Team Member 2",
-      role: "Computer Vision Engineer",
-      description: "Expert in parking detection and AI systems",
+      name: "Piyush Singh",
+      description: "Full Stack Developer",
     },
     {
-      name: "Team Member 3",
-      role: "UI/UX Designer",
-      description: "Creating intuitive and beautiful user experiences",
+      name: "Pranil Lama",
+      description: "Full Stack Developer",
     },
     {
-      name: "Team Member 4",
-      role: "Backend Engineer",
-      description: "Building scalable and reliable infrastructure",
+      name: "Raisa Tasnim",
+      description: "Full Stack Developer",
+    },
+    {
+      name: "Anu Gurung",
+      description: "Full Stack Developer",
+    },
+    {
+      name: "Saugat Bhatta",
+      description: "Full Stack Developer",
     },
   ];
 
@@ -33,22 +37,26 @@ function AboutUs() {
     {
       icon: <MapPin className="w-6 h-4" />,
       title: "Real-Time Updates",
-      description: "Get live parking availability updates as spots become available or occupied",
+      description:
+        "Get live parking availability updates as spots become available or occupied",
     },
     {
       icon: <Zap className="w-6 h-4" />,
       title: "Fast & Efficient",
-      description: "Find parking spots quickly with our optimized search and navigation",
+      description:
+        "Find parking spots quickly with our optimized search and navigation",
     },
     {
       icon: <Shield className="w-6 h-4" />,
       title: "Reliable Data",
-      description: "Powered by advanced computer vision technology for accurate spot detection",
+      description:
+        "Powered by advanced computer vision technology for accurate spot detection",
     },
     {
       icon: <Car className="w-6 h-4" />,
       title: "Easy Navigation",
-      description: "Get directions directly to available parking spots with one click",
+      description:
+        "Get directions directly to available parking spots with one click",
     },
   ];
 
@@ -60,16 +68,16 @@ function AboutUs() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-blue-100/40 via-transparent to-transparent"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-orange-100/40 via-transparent to-transparent"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-purple-100/30 via-transparent to-transparent"></div>
-        
+
         {/* Grid pattern overlay */}
-        <div 
+        <div
           className="absolute inset-0 opacity-[0.03]"
           style={{
             backgroundImage: `
               linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px),
               linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px)
             `,
-            backgroundSize: '50px 50px'
+            backgroundSize: "50px 50px",
           }}
         ></div>
 
@@ -102,7 +110,8 @@ function AboutUs() {
             About <span className="text-blue-600">MavPark</span>
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Revolutionizing parking management at UTA with real-time availability tracking
+            Revolutionizing parking management at UTA with real-time
+            availability tracking
           </p>
         </motion.div>
 
@@ -120,13 +129,24 @@ function AboutUs() {
             </h2>
             <div className="space-y-4 text-lg text-gray-700 leading-relaxed">
               <p>
-                <strong className="text-blue-600">MavPark</strong> is an innovative parking management system designed specifically for the University of Texas at Arlington (UTA). Our platform provides real-time parking availability information, helping students, faculty, and staff find parking spots quickly and efficiently.
+                <strong className="text-blue-600">MavPark</strong> is an
+                innovative parking management system designed specifically for
+                the University of Texas at Arlington (UTA). Our platform
+                provides real-time parking availability information, helping
+                students, faculty, and staff find parking spots quickly and
+                efficiently.
               </p>
               <p>
-                Using advanced computer vision technology, MavPark continuously monitors parking lots and updates spot availability in real-time. Whether you're looking for a spot near your building or planning your route to campus, MavPark ensures you always know where parking is available.
+                Using advanced computer vision technology, MavPark continuously
+                monitors parking lots and updates spot availability in
+                real-time. Whether you're looking for a spot near your building
+                or planning your route to campus, MavPark ensures you always
+                know where parking is available.
               </p>
               <p>
-                Our mission is to reduce the time spent searching for parking, decrease traffic congestion, and improve the overall campus experience for the UTA community.
+                Our mission is to reduce the time spent searching for parking,
+                decrease traffic congestion, and improve the overall campus
+                experience for the UTA community.
               </p>
             </div>
           </div>

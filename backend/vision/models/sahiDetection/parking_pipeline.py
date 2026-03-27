@@ -17,7 +17,10 @@ a vehicle center (blue dot) lies inside the polygon ROI.
 # CONFIGURATION
 # ============================================================
 
-VIDEO_PATH = "IMG_9798.MOV"
+
+TEMP_IMAGE_PATH = "../cameraCapture/temp_frames/frame_1771619669.jpg"
+
+VIDEO_PATH = TEMP_IMAGE_PATH #"IMG_9798.MOV"
 PARKING_SPOTS_JSON = "parking_spots_9798.json"
 LOT_NAME = "Lot A"
 

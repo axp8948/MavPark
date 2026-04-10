@@ -1,5 +1,4 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import lotConfigs from '../data/lotConfigs';
 
 // Overlay bounds and image dimensions per lot
 const LOT_META = {
@@ -10,7 +9,8 @@ const LOT_META = {
     imgW: 733,
     imgH: 731,
     idOffset: 400,
-    totalSpots: 273,
+    totalSpots: 171,
+    lotCenter: { lat: 32.7331, lng: -97.1115 },
   },
   2: {
     label: 'F-10 (Lot B)',
@@ -30,13 +30,34 @@ function pixelToLatLng(px, py, imgW, imgH, bounds) {
   return { lat: parseFloat(lat.toFixed(10)), lng: parseFloat(lng.toFixed(10)) };
 }
 
-// Generate JS output for spotCoordinates
-function generateOutput(spots, idOffset) {
+// Generate the complete spotCoordinates.js file content
+function generateOutput(spots, meta) {
   if (spots.length === 0) return '// No spots calibrated yet';
   const lines = spots.map(({ spotId, lat, lng }) =>
     `  "${spotId}": { lat: ${lat}, lng: ${lng} },`
   );
-  return `export const spotCoordinates = {\n${lines.join('\n')}\n};`;
+  const center = meta.lotCenter || { lat: 0, lng: 0 };
+  return `// Parking spot coordinates for MavPark
+// Each spot ID maps to a { lat, lng } center point
+// Calibrated using the visual calibration tool at /calibrate
+// To recalibrate: visit /calibrate, click each spot on the overlay image,
+// then copy the generated output and replace spotCoordinates.js with it.
+
+export const spotCoordinates = {
+${lines.join('\n')}
+};
+
+// Export the ID offset for other components
+export const SPOT_ID_OFFSET = ${meta.idOffset};
+
+// Lot center point
+export const lotCenter = {
+  lat: ${center.lat},
+  lng: ${center.lng},
+};
+
+// Total spots count
+export const totalSpots = Object.keys(spotCoordinates).length;`;
 }
 
 export default function SpotCalibrationTool() {
@@ -103,7 +124,7 @@ export default function SpotCalibrationTool() {
   };
 
   const copyOutput = () => {
-    const output = generateOutput(spots, meta.idOffset);
+    const output = generateOutput(spots, meta);
     navigator.clipboard.writeText(output).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -246,7 +267,7 @@ export default function SpotCalibrationTool() {
             Generated Output ({spots.length} spots)
           </div>
           <pre className="flex-1 overflow-auto text-xs text-green-400 p-3 font-mono leading-5 whitespace-pre-wrap break-all">
-            {generateOutput(spots, meta.idOffset)}
+            {generateOutput(spots, meta)}
           </pre>
           <div className="px-3 py-2 border-t border-gray-700">
             <button onClick={copyOutput} disabled={spots.length === 0}

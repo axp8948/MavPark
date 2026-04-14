@@ -27,7 +27,7 @@ from pathlib import Path
 # =========================================================
 VIDEO_PATH = "IMG_9798.MOV"
 OUTPUT_JSON = "parking_spots_9798.json"
-USE_RECTANGLE_MODE = False
+USE_RECTANGLE_MODE = True
 # =========================================================
 
 

@@ -1,693 +1,993 @@
 {
   "parkingLotName": "Lot A",
-  "totalSpots": 171,
-  "freeSpots": 59,
-  "occupiedSpots": 112,
+  "totalSpots": 246,
+  "freeSpots": 83,
+  "occupiedSpots": 163,
   "spots": [
     {
-      "spotId": "spot_001",
+      "spotId": "1",
       "status": "occupied"
     },
     {
-      "spotId": "spot_002",
+      "spotId": "2",
       "status": "free"
     },
     {
-      "spotId": "spot_003",
+      "spotId": "3",
       "status": "occupied"
     },
     {
-      "spotId": "spot_004",
+      "spotId": "4",
       "status": "free"
     },
     {
-      "spotId": "spot_005",
+      "spotId": "5",
       "status": "free"
     },
     {
-      "spotId": "spot_006",
+      "spotId": "6",
       "status": "occupied"
     },
     {
-      "spotId": "spot_007",
+      "spotId": "7",
       "status": "free"
     },
     {
-      "spotId": "spot_008",
+      "spotId": "8",
+      "status": "occupied"
+    },
+    {
+      "spotId": "9",
+      "status": "occupied"
+    },
+    {
+      "spotId": "10",
+      "status": "occupied"
+    },
+    {
+      "spotId": "11",
       "status": "free"
     },
     {
-      "spotId": "spot_009",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_010",
+      "spotId": "12",
       "status": "free"
     },
     {
-      "spotId": "spot_011",
+      "spotId": "13",
       "status": "free"
     },
     {
-      "spotId": "spot_012",
+      "spotId": "14",
       "status": "free"
     },
     {
-      "spotId": "spot_013",
+      "spotId": "15",
       "status": "free"
     },
     {
-      "spotId": "spot_014",
+      "spotId": "16",
       "status": "free"
     },
     {
-      "spotId": "spot_015",
+      "spotId": "17",
+      "status": "occupied"
+    },
+    {
+      "spotId": "18",
+      "status": "occupied"
+    },
+    {
+      "spotId": "19",
+      "status": "occupied"
+    },
+    {
+      "spotId": "20",
+      "status": "occupied"
+    },
+    {
+      "spotId": "21",
+      "status": "occupied"
+    },
+    {
+      "spotId": "22",
+      "status": "occupied"
+    },
+    {
+      "spotId": "23",
+      "status": "occupied"
+    },
+    {
+      "spotId": "24",
+      "status": "occupied"
+    },
+    {
+      "spotId": "25",
       "status": "free"
     },
     {
-      "spotId": "spot_016",
+      "spotId": "26",
       "status": "free"
     },
     {
-      "spotId": "spot_017",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_018",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_019",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_020",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_021",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_022",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_023",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_024",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_025",
+      "spotId": "27",
       "status": "free"
     },
     {
-      "spotId": "spot_026",
+      "spotId": "28",
+      "status": "occupied"
+    },
+    {
+      "spotId": "29",
       "status": "free"
     },
     {
-      "spotId": "spot_027",
+      "spotId": "30",
       "status": "free"
     },
     {
-      "spotId": "spot_028",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_029",
+      "spotId": "31",
       "status": "free"
     },
     {
-      "spotId": "spot_030",
+      "spotId": "32",
       "status": "free"
     },
     {
-      "spotId": "spot_031",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_032",
+      "spotId": "33",
       "status": "free"
     },
     {
-      "spotId": "spot_033",
+      "spotId": "34",
+      "status": "occupied"
+    },
+    {
+      "spotId": "35",
       "status": "free"
     },
     {
-      "spotId": "spot_034",
+      "spotId": "36",
+      "status": "occupied"
+    },
+    {
+      "spotId": "37",
+      "status": "occupied"
+    },
+    {
+      "spotId": "38",
+      "status": "occupied"
+    },
+    {
+      "spotId": "39",
+      "status": "occupied"
+    },
+    {
+      "spotId": "40",
       "status": "free"
     },
     {
-      "spotId": "spot_035",
+      "spotId": "41",
+      "status": "occupied"
+    },
+    {
+      "spotId": "42",
+      "status": "occupied"
+    },
+    {
+      "spotId": "43",
+      "status": "occupied"
+    },
+    {
+      "spotId": "44",
+      "status": "occupied"
+    },
+    {
+      "spotId": "45",
+      "status": "occupied"
+    },
+    {
+      "spotId": "46",
+      "status": "occupied"
+    },
+    {
+      "spotId": "47",
+      "status": "occupied"
+    },
+    {
+      "spotId": "48",
+      "status": "occupied"
+    },
+    {
+      "spotId": "49",
+      "status": "occupied"
+    },
+    {
+      "spotId": "50",
+      "status": "occupied"
+    },
+    {
+      "spotId": "51",
       "status": "free"
     },
     {
-      "spotId": "spot_036",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_037",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_038",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_039",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_040",
+      "spotId": "52",
       "status": "free"
     },
     {
-      "spotId": "spot_041",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_042",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_043",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_044",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_045",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_046",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_047",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_048",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_049",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_050",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_051",
+      "spotId": "53",
       "status": "free"
     },
     {
-      "spotId": "spot_052",
+      "spotId": "54",
       "status": "free"
     },
     {
-      "spotId": "spot_053",
+      "spotId": "55",
       "status": "free"
     },
     {
-      "spotId": "spot_054",
+      "spotId": "56",
+      "status": "occupied"
+    },
+    {
+      "spotId": "57",
       "status": "free"
     },
     {
-      "spotId": "spot_055",
+      "spotId": "58",
       "status": "free"
     },
     {
-      "spotId": "spot_056",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_057",
+      "spotId": "59",
       "status": "free"
     },
     {
-      "spotId": "spot_058",
+      "spotId": "60",
+      "status": "occupied"
+    },
+    {
+      "spotId": "61",
+      "status": "occupied"
+    },
+    {
+      "spotId": "62",
+      "status": "occupied"
+    },
+    {
+      "spotId": "63",
+      "status": "occupied"
+    },
+    {
+      "spotId": "64",
+      "status": "occupied"
+    },
+    {
+      "spotId": "65",
       "status": "free"
     },
     {
-      "spotId": "spot_059",
+      "spotId": "66",
+      "status": "occupied"
+    },
+    {
+      "spotId": "67",
+      "status": "occupied"
+    },
+    {
+      "spotId": "68",
+      "status": "occupied"
+    },
+    {
+      "spotId": "69",
+      "status": "occupied"
+    },
+    {
+      "spotId": "70",
+      "status": "occupied"
+    },
+    {
+      "spotId": "71",
+      "status": "occupied"
+    },
+    {
+      "spotId": "72",
+      "status": "occupied"
+    },
+    {
+      "spotId": "73",
       "status": "free"
     },
     {
-      "spotId": "spot_060",
+      "spotId": "74",
       "status": "occupied"
     },
     {
-      "spotId": "spot_061",
+      "spotId": "75",
       "status": "occupied"
     },
     {
-      "spotId": "spot_062",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_063",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_064",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_065",
+      "spotId": "76",
       "status": "free"
     },
     {
-      "spotId": "spot_066",
+      "spotId": "77",
+      "status": "occupied"
+    },
+    {
+      "spotId": "78",
+      "status": "occupied"
+    },
+    {
+      "spotId": "79",
+      "status": "occupied"
+    },
+    {
+      "spotId": "80",
       "status": "free"
     },
     {
-      "spotId": "spot_067",
+      "spotId": "81",
       "status": "occupied"
     },
     {
-      "spotId": "spot_068",
+      "spotId": "82",
       "status": "occupied"
     },
     {
-      "spotId": "spot_069",
+      "spotId": "83",
       "status": "occupied"
     },
     {
-      "spotId": "spot_070",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_071",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_072",
+      "spotId": "84",
       "status": "free"
     },
     {
-      "spotId": "spot_073",
+      "spotId": "85",
+      "status": "occupied"
+    },
+    {
+      "spotId": "86",
+      "status": "occupied"
+    },
+    {
+      "spotId": "87",
+      "status": "occupied"
+    },
+    {
+      "spotId": "88",
+      "status": "occupied"
+    },
+    {
+      "spotId": "89",
+      "status": "occupied"
+    },
+    {
+      "spotId": "90",
+      "status": "occupied"
+    },
+    {
+      "spotId": "91",
       "status": "free"
     },
     {
-      "spotId": "spot_074",
+      "spotId": "92",
       "status": "occupied"
     },
     {
-      "spotId": "spot_075",
+      "spotId": "93",
       "status": "occupied"
     },
     {
-      "spotId": "spot_076",
+      "spotId": "94",
+      "status": "occupied"
+    },
+    {
+      "spotId": "95",
+      "status": "occupied"
+    },
+    {
+      "spotId": "96",
+      "status": "occupied"
+    },
+    {
+      "spotId": "97",
+      "status": "occupied"
+    },
+    {
+      "spotId": "98",
+      "status": "occupied"
+    },
+    {
+      "spotId": "99",
+      "status": "occupied"
+    },
+    {
+      "spotId": "100",
+      "status": "occupied"
+    },
+    {
+      "spotId": "101",
+      "status": "occupied"
+    },
+    {
+      "spotId": "102",
+      "status": "occupied"
+    },
+    {
+      "spotId": "103",
+      "status": "occupied"
+    },
+    {
+      "spotId": "104",
+      "status": "occupied"
+    },
+    {
+      "spotId": "105",
+      "status": "occupied"
+    },
+    {
+      "spotId": "106",
+      "status": "occupied"
+    },
+    {
+      "spotId": "107",
+      "status": "occupied"
+    },
+    {
+      "spotId": "108",
+      "status": "occupied"
+    },
+    {
+      "spotId": "109",
+      "status": "occupied"
+    },
+    {
+      "spotId": "110",
+      "status": "occupied"
+    },
+    {
+      "spotId": "111",
       "status": "free"
     },
     {
-      "spotId": "spot_077",
+      "spotId": "112",
       "status": "free"
     },
     {
-      "spotId": "spot_078",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_079",
+      "spotId": "113",
       "status": "free"
     },
     {
-      "spotId": "spot_080",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_081",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_082",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_083",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_084",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_085",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_086",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_087",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_088",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_089",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_090",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_091",
+      "spotId": "114",
       "status": "free"
     },
     {
-      "spotId": "spot_092",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_093",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_094",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_095",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_096",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_097",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_098",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_099",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_100",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_101",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_102",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_103",
+      "spotId": "115",
       "status": "free"
     },
     {
-      "spotId": "spot_104",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_105",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_106",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_107",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_108",
+      "spotId": "116",
       "status": "free"
     },
     {
-      "spotId": "spot_109",
+      "spotId": "117",
+      "status": "occupied"
+    },
+    {
+      "spotId": "118",
       "status": "free"
     },
     {
-      "spotId": "spot_110",
+      "spotId": "119",
       "status": "occupied"
     },
     {
-      "spotId": "spot_111",
+      "spotId": "120",
+      "status": "occupied"
+    },
+    {
+      "spotId": "121",
+      "status": "occupied"
+    },
+    {
+      "spotId": "122",
+      "status": "occupied"
+    },
+    {
+      "spotId": "123",
+      "status": "occupied"
+    },
+    {
+      "spotId": "124",
+      "status": "occupied"
+    },
+    {
+      "spotId": "125",
+      "status": "occupied"
+    },
+    {
+      "spotId": "126",
+      "status": "occupied"
+    },
+    {
+      "spotId": "127",
+      "status": "occupied"
+    },
+    {
+      "spotId": "128",
+      "status": "occupied"
+    },
+    {
+      "spotId": "129",
+      "status": "occupied"
+    },
+    {
+      "spotId": "130",
+      "status": "occupied"
+    },
+    {
+      "spotId": "131",
+      "status": "occupied"
+    },
+    {
+      "spotId": "132",
+      "status": "occupied"
+    },
+    {
+      "spotId": "133",
+      "status": "occupied"
+    },
+    {
+      "spotId": "134",
+      "status": "occupied"
+    },
+    {
+      "spotId": "135",
+      "status": "occupied"
+    },
+    {
+      "spotId": "136",
+      "status": "occupied"
+    },
+    {
+      "spotId": "137",
       "status": "free"
     },
     {
-      "spotId": "spot_112",
+      "spotId": "138",
+      "status": "occupied"
+    },
+    {
+      "spotId": "139",
+      "status": "occupied"
+    },
+    {
+      "spotId": "140",
       "status": "free"
     },
     {
-      "spotId": "spot_113",
+      "spotId": "141",
+      "status": "occupied"
+    },
+    {
+      "spotId": "142",
+      "status": "occupied"
+    },
+    {
+      "spotId": "143",
+      "status": "occupied"
+    },
+    {
+      "spotId": "144",
+      "status": "occupied"
+    },
+    {
+      "spotId": "145",
       "status": "free"
     },
     {
-      "spotId": "spot_114",
+      "spotId": "146",
       "status": "occupied"
     },
     {
-      "spotId": "spot_115",
+      "spotId": "147",
+      "status": "occupied"
+    },
+    {
+      "spotId": "148",
+      "status": "occupied"
+    },
+    {
+      "spotId": "149",
+      "status": "occupied"
+    },
+    {
+      "spotId": "150",
+      "status": "occupied"
+    },
+    {
+      "spotId": "151",
+      "status": "occupied"
+    },
+    {
+      "spotId": "152",
+      "status": "occupied"
+    },
+    {
+      "spotId": "153",
+      "status": "occupied"
+    },
+    {
+      "spotId": "154",
+      "status": "occupied"
+    },
+    {
+      "spotId": "155",
+      "status": "occupied"
+    },
+    {
+      "spotId": "156",
+      "status": "occupied"
+    },
+    {
+      "spotId": "157",
+      "status": "occupied"
+    },
+    {
+      "spotId": "158",
+      "status": "occupied"
+    },
+    {
+      "spotId": "159",
+      "status": "occupied"
+    },
+    {
+      "spotId": "160",
       "status": "free"
     },
     {
-      "spotId": "spot_116",
+      "spotId": "161",
+      "status": "occupied"
+    },
+    {
+      "spotId": "162",
+      "status": "occupied"
+    },
+    {
+      "spotId": "163",
       "status": "free"
     },
     {
-      "spotId": "spot_117",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_118",
+      "spotId": "164",
       "status": "free"
     },
     {
-      "spotId": "spot_119",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_120",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_121",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_122",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_123",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_124",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_125",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_126",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_127",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_128",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_129",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_130",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_131",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_132",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_133",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_134",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_135",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_136",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_137",
+      "spotId": "165",
       "status": "free"
     },
     {
-      "spotId": "spot_138",
+      "spotId": "166",
       "status": "occupied"
     },
     {
-      "spotId": "spot_139",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_140",
+      "spotId": "167",
       "status": "free"
     },
     {
-      "spotId": "spot_141",
+      "spotId": "168",
       "status": "occupied"
     },
     {
-      "spotId": "spot_142",
+      "spotId": "169",
       "status": "free"
     },
     {
-      "spotId": "spot_143",
+      "spotId": "170",
       "status": "occupied"
     },
     {
-      "spotId": "spot_144",
+      "spotId": "171",
       "status": "occupied"
     },
     {
-      "spotId": "spot_145",
+      "spotId": "173",
+      "status": "occupied"
+    },
+    {
+      "spotId": "174",
+      "status": "occupied"
+    },
+    {
+      "spotId": "175",
       "status": "free"
     },
     {
-      "spotId": "spot_146",
+      "spotId": "176",
       "status": "occupied"
     },
     {
-      "spotId": "spot_147",
+      "spotId": "177",
       "status": "occupied"
     },
     {
-      "spotId": "spot_148",
+      "spotId": "178",
       "status": "occupied"
     },
     {
-      "spotId": "spot_149",
+      "spotId": "179",
+      "status": "occupied"
+    },
+    {
+      "spotId": "180",
       "status": "free"
     },
     {
-      "spotId": "spot_150",
+      "spotId": "181",
       "status": "occupied"
     },
     {
-      "spotId": "spot_151",
+      "spotId": "182",
       "status": "occupied"
     },
     {
-      "spotId": "spot_152",
+      "spotId": "183",
       "status": "occupied"
     },
     {
-      "spotId": "spot_153",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_154",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_155",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_156",
+      "spotId": "184",
       "status": "free"
     },
     {
-      "spotId": "spot_157",
+      "spotId": "185",
       "status": "occupied"
     },
     {
-      "spotId": "spot_158",
+      "spotId": "186",
       "status": "occupied"
     },
     {
-      "spotId": "spot_159",
+      "spotId": "187",
       "status": "occupied"
     },
     {
-      "spotId": "spot_160",
+      "spotId": "188",
+      "status": "occupied"
+    },
+    {
+      "spotId": "189",
+      "status": "occupied"
+    },
+    {
+      "spotId": "190",
       "status": "free"
     },
     {
-      "spotId": "spot_161",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_162",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_163",
+      "spotId": "191",
       "status": "free"
     },
     {
-      "spotId": "spot_164",
+      "spotId": "192",
       "status": "free"
     },
     {
-      "spotId": "spot_165",
+      "spotId": "193",
       "status": "free"
     },
     {
-      "spotId": "spot_166",
+      "spotId": "194",
       "status": "occupied"
     },
     {
-      "spotId": "spot_167",
+      "spotId": "195",
+      "status": "occupied"
+    },
+    {
+      "spotId": "196",
       "status": "free"
     },
     {
-      "spotId": "spot_168",
-      "status": "occupied"
-    },
-    {
-      "spotId": "spot_169",
+      "spotId": "197",
       "status": "free"
     },
     {
-      "spotId": "spot_170",
+      "spotId": "198",
       "status": "occupied"
     },
     {
-      "spotId": "spot_171",
+      "spotId": "199",
       "status": "occupied"
+    },
+    {
+      "spotId": "200",
+      "status": "free"
+    },
+    {
+      "spotId": "201",
+      "status": "occupied"
+    },
+    {
+      "spotId": "202",
+      "status": "occupied"
+    },
+    {
+      "spotId": "203",
+      "status": "free"
+    },
+    {
+      "spotId": "204",
+      "status": "occupied"
+    },
+    {
+      "spotId": "205",
+      "status": "occupied"
+    },
+    {
+      "spotId": "206",
+      "status": "occupied"
+    },
+    {
+      "spotId": "207",
+      "status": "occupied"
+    },
+    {
+      "spotId": "208",
+      "status": "occupied"
+    },
+    {
+      "spotId": "209",
+      "status": "free"
+    },
+    {
+      "spotId": "210",
+      "status": "occupied"
+    },
+    {
+      "spotId": "211",
+      "status": "occupied"
+    },
+    {
+      "spotId": "212",
+      "status": "free"
+    },
+    {
+      "spotId": "213",
+      "status": "free"
+    },
+    {
+      "spotId": "214",
+      "status": "free"
+    },
+    {
+      "spotId": "215",
+      "status": "free"
+    },
+    {
+      "spotId": "216",
+      "status": "free"
+    },
+    {
+      "spotId": "217",
+      "status": "free"
+    },
+    {
+      "spotId": "218",
+      "status": "free"
+    },
+    {
+      "spotId": "219",
+      "status": "free"
+    },
+    {
+      "spotId": "220",
+      "status": "free"
+    },
+    {
+      "spotId": "221",
+      "status": "occupied"
+    },
+    {
+      "spotId": "222",
+      "status": "free"
+    },
+    {
+      "spotId": "223",
+      "status": "occupied"
+    },
+    {
+      "spotId": "224",
+      "status": "free"
+    },
+    {
+      "spotId": "225",
+      "status": "occupied"
+    },
+    {
+      "spotId": "226",
+      "status": "occupied"
+    },
+    {
+      "spotId": "227",
+      "status": "occupied"
+    },
+    {
+      "spotId": "228",
+      "status": "occupied"
+    },
+    {
+      "spotId": "229",
+      "status": "occupied"
+    },
+    {
+      "spotId": "230",
+      "status": "occupied"
+    },
+    {
+      "spotId": "231",
+      "status": "occupied"
+    },
+    {
+      "spotId": "232",
+      "status": "occupied"
+    },
+    {
+      "spotId": "233",
+      "status": "occupied"
+    },
+    {
+      "spotId": "234",
+      "status": "occupied"
+    },
+    {
+      "spotId": "235",
+      "status": "occupied"
+    },
+    {
+      "spotId": "236",
+      "status": "occupied"
+    },
+    {
+      "spotId": "237",
+      "status": "occupied"
+    },
+    {
+      "spotId": "238",
+      "status": "free"
+    },
+    {
+      "spotId": "239",
+      "status": "free"
+    },
+    {
+      "spotId": "240",
+      "status": "free"
+    },
+    {
+      "spotId": "241",
+      "status": "free"
+    },
+    {
+      "spotId": "242",
+      "status": "free"
+    },
+    {
+      "spotId": "243",
+      "status": "free"
+    },
+    {
+      "spotId": "244",
+      "status": "free"
+    },
+    {
+      "spotId": "245",
+      "status": "free"
+    },
+    {
+      "spotId": "246",
+      "status": "free"
+    },
+    {
+      "spotId": "247",
+      "status": "free"
     }
   ],
-  "timestamp": 1771619892.811569
+  "timestamp": 1775787139.556948
 }

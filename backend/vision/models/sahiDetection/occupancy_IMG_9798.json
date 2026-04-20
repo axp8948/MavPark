@@ -1,8 +1,8 @@
 {
   "parkingLotName": "Lot A",
   "totalSpots": 246,
-  "freeSpots": 94,
-  "occupiedSpots": 152,
+  "freeSpots": 90,
+  "occupiedSpots": 156,
   "spots": [
     {
       "spotId": "spot_001",
@@ -70,7 +70,7 @@
     },
     {
       "spotId": "spot_017",
-      "status": "occupied"
+      "status": "free"
     },
     {
       "spotId": "spot_018",
@@ -126,7 +126,7 @@
     },
     {
       "spotId": "spot_031",
-      "status": "free"
+      "status": "occupied"
     },
     {
       "spotId": "spot_032",
@@ -154,7 +154,7 @@
     },
     {
       "spotId": "spot_038",
-      "status": "free"
+      "status": "occupied"
     },
     {
       "spotId": "spot_039",
@@ -306,11 +306,11 @@
     },
     {
       "spotId": "spot_076",
-      "status": "free"
+      "status": "occupied"
     },
     {
       "spotId": "spot_077",
-      "status": "free"
+      "status": "occupied"
     },
     {
       "spotId": "spot_078",
@@ -382,7 +382,7 @@
     },
     {
       "spotId": "spot_095",
-      "status": "free"
+      "status": "occupied"
     },
     {
       "spotId": "spot_096",
@@ -470,7 +470,7 @@
     },
     {
       "spotId": "spot_117",
-      "status": "free"
+      "status": "occupied"
     },
     {
       "spotId": "spot_118",
@@ -558,11 +558,11 @@
     },
     {
       "spotId": "spot_139",
-      "status": "occupied"
+      "status": "free"
     },
     {
       "spotId": "spot_140",
-      "status": "free"
+      "status": "occupied"
     },
     {
       "spotId": "spot_141",
@@ -682,11 +682,11 @@
     },
     {
       "spotId": "spot_170",
-      "status": "occupied"
+      "status": "free"
     },
     {
       "spotId": "spot_171",
-      "status": "occupied"
+      "status": "free"
     },
     {
       "spotId": "spot_173",
@@ -734,7 +734,7 @@
     },
     {
       "spotId": "spot_184",
-      "status": "occupied"
+      "status": "free"
     },
     {
       "spotId": "spot_185",
@@ -742,7 +742,7 @@
     },
     {
       "spotId": "spot_186",
-      "status": "free"
+      "status": "occupied"
     },
     {
       "spotId": "spot_187",
@@ -774,7 +774,7 @@
     },
     {
       "spotId": "spot_194",
-      "status": "free"
+      "status": "occupied"
     },
     {
       "spotId": "spot_195",
@@ -782,7 +782,7 @@
     },
     {
       "spotId": "spot_196",
-      "status": "occupied"
+      "status": "free"
     },
     {
       "spotId": "spot_197",
@@ -806,7 +806,7 @@
     },
     {
       "spotId": "spot_202",
-      "status": "occupied"
+      "status": "free"
     },
     {
       "spotId": "spot_203",
@@ -814,7 +814,7 @@
     },
     {
       "spotId": "spot_204",
-      "status": "occupied"
+      "status": "free"
     },
     {
       "spotId": "spot_205",
@@ -898,11 +898,11 @@
     },
     {
       "spotId": "spot_225",
-      "status": "free"
+      "status": "occupied"
     },
     {
       "spotId": "spot_226",
-      "status": "free"
+      "status": "occupied"
     },
     {
       "spotId": "spot_227",
@@ -914,7 +914,7 @@
     },
     {
       "spotId": "spot_229",
-      "status": "free"
+      "status": "occupied"
     },
     {
       "spotId": "spot_230",
@@ -989,5 +989,5 @@
       "status": "free"
     }
   ],
-  "timestamp": 1776653734.112073
+  "timestamp": 1776655675.107018
 }

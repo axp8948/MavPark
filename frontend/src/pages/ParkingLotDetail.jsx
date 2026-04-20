@@ -62,23 +62,36 @@ function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
         availableSpots: freeFromSpots,
       }));
 
-      const spotsMap = new Map();
-      parkingData.spots.forEach((spot) => {
-        const raw = spot.spotId.toString();
-        const base = parseInt(raw.replace(/^spot_0*/, ''), 10);
-        const numeric = String(base + lotConfig.spotIdOffset);
-        spotsMap.set(numeric, mapStatus(spot.status));
-      });
+      // Create a map of spotId -> status for quick lookup
+      // Backend sends "spot_001", "spot_002", ... (1-based index)
+      // Local spots use spotIdOffset + index (e.g. 401, 402, ...)
+      const spotsMap = new Map();
+      parkingData.spots.forEach((spot) => {
+        const spotIndex = parseInt(spot.spotId.replace('spot_', ''), 10);
+        const localId = (lotConfig.spotIdOffset + spotIndex).toString();
+        spotsMap.set(localId, mapStatus(spot.status));
+      });
 
-      setParkingSpots((prevSpots) => {
-        return prevSpots.map((spot) => {
-          const status = spotsMap.get(spot.number);
-          if (status) {
-            return { ...spot, status };
-          }
-          return { ...spot, status: 'unknown' };
-        });
-      });
+      // Update parking spots with real-time data
+      setParkingSpots((prevSpots) => {
+        return prevSpots.map((spot) => {
+          const status = spotsMap.get(spot.number);
+          
+          // If this spot exists in backend data, update its status
+          if (status) {
+            return {
+              ...spot,
+              status: status,
+            };
+          }
+          
+          // Keep as unknown if no data from backend
+          return {
+            ...spot,
+            status: 'unknown',
+          };
+        });
+      });
     }
   }, [parkingData]);
 
@@ -89,25 +102,26 @@ function ParkingLotDetail({ selectedLot, onBack, isDarkMode }) {
       getParkingSpotsByLot(selectedLot)
         .then((data) => {
           if (data && data.length > 0) {
-            const spotsMap = new Map();
-            data.forEach((spot) => {
-              const raw = (spot.spotId || spot.id || '').toString();
-              const base = parseInt(raw.replace(/^spot_0*/, ''), 10);
-              if (!isNaN(base)) {
-                const numeric = String(base + lotConfig.spotIdOffset);
-                spotsMap.set(numeric, mapStatus(spot.status));
-              }
-            });
+            // Create a map of spotId -> status for quick lookup
+            // IDs now match directly (401-based)
+            const spotsMap = new Map();
+            data.forEach((spot) => {
+              const spotId = spot.spotId || spot.id;
+              if (spotId) {
+                spotsMap.set(spotId.toString(), mapStatus(spot.status));
+              }
+            });
 
-            setParkingSpots((prevSpots) => {
-              return prevSpots.map((spot) => {
-                const status = spotsMap.get(spot.number) || spotsMap.get(spot.id);
-                if (status) {
-                  return { ...spot, status };
-                }
-                return spot;
-              });
-            });
+            // Update only statuses, keep the original spots array with coordinates
+            setParkingSpots((prevSpots) => {
+              return prevSpots.map((spot) => {
+                const status = spotsMap.get(spot.number) || spotsMap.get(spot.id);
+                if (status) {
+                  return { ...spot, status };
+                }
+                return spot;
+              });
+            });
           }
         })
         .catch((err) => console.error("Error fetching spots:", err));

@@ -20,7 +20,7 @@ a vehicle center (blue dot) lies inside the polygon ROI.
 
 TEMP_IMAGE_PATH = "../cameraCapture/temp_frames/frame_1771619669.jpg"
 
-VIDEO_PATH = "IMG_9798.MOV"
+VIDEO_PATH = "IMG_9798.MOV" #TEMP_IMAGE_PATH 
 PARKING_SPOTS_JSON = "parking_spots_9798.json"
 LOT_NAME = "Lot A"
 
@@ -156,7 +156,7 @@ def compute_occupancy(spots, vehicles):
                 break
 
     spot_status_list = [
-        {"spotId": str(int(k.split("_")[1])), "status": v}
+        {"spotId": k, "status": v}
         for k, v in status.items()
     ]
 
@@ -175,10 +175,10 @@ def visualize(frame, spots, vehicles, spot_status_list):
     img = frame.copy()
     occ_map = {s["spotId"]: s["status"] for s in spot_status_list}
 
+    # Draw spots
     for s in spots:
         pts = np.array(s["polygon"].exterior.coords, dtype=np.int32)
-        key = str(int(s["id"].split("_")[1]))
-        color = COLOR_OCCUPIED if occ_map.get(key) == "occupied" else COLOR_FREE
+        color = COLOR_OCCUPIED if occ_map[s["id"]] == "occupied" else COLOR_FREE
         cv2.polylines(img, [pts], True, color, 2)
 
     # Draw vehicles

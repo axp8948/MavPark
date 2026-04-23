@@ -61,3 +61,107 @@ html, body, #root {
 .text-primary { color: rgb(var(--primary-foreground)); }
 .bg-accent { background-color: rgb(var(--accent)); }
 .text-accent { color: rgb(var(--accent-foreground)); }
+
+/* ============================================================
+   UTA Mavericks brand tokens — used by the MavPark landing hero
+   ============================================================ */
+:root {
+  --uta-blue: #0064B1;
+  --uta-blue-deep: #002855;
+  --uta-blue-glow: #3B82F6;
+  --uta-orange: #F58025;
+  --uta-orange-soft: #FFB26B;
+  --uta-orange-glow: #FF9A4D;
+  --bg-space: #07101F;
+  --bg-space-2: #0B1A2E;
+}
+
+.text-gradient-maverick {
+  background-image: linear-gradient(
+    90deg,
+    var(--uta-orange) 0%,
+    #ffffff 45%,
+    var(--uta-blue-glow) 70%,
+    var(--uta-blue-deep) 100%
+  );
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.glow-orange {
+  box-shadow:
+    0 0 0 1px rgba(245, 128, 37, 0.35),
+    0 10px 30px -10px rgba(245, 128, 37, 0.65),
+    0 0 40px -5px rgba(255, 154, 77, 0.55);
+}
+
+.glow-orange-soft {
+  filter: drop-shadow(0 0 12px rgba(245, 128, 37, 0.75));
+}
+
+.glow-blue-soft {
+  filter: drop-shadow(0 0 14px rgba(59, 130, 246, 0.6));
+}
+
+/* Hero background effects */
+@keyframes orbDrift {
+  0%,   100% { transform: translate3d(0, 0, 0) scale(1); }
+  33%        { transform: translate3d(40px, -60px, 0) scale(1.08); }
+  66%        { transform: translate3d(-30px, 50px, 0) scale(0.94); }
+}
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+/* Car drive + trail keyframes used by the MavPark wordmark animation */
+@keyframes drive {
+  0%   { transform: translate3d(-12%, 0, 0); opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 1; }
+  100% { transform: translate3d(112%, 0, 0); opacity: 0; }
+}
+
+@keyframes carBob {
+  0%, 100% { transform: translateY(0) rotate(-0.5deg); }
+  50%      { transform: translateY(-4px) rotate(0.5deg); }
+}
+
+@keyframes trail {
+  0%   { stroke-dashoffset: 1000; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { stroke-dashoffset: 0;    opacity: 0; }
+}
+
+@keyframes roadDash {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: -80; }
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1;   transform: scale(1); }
+  50%      { opacity: 0.5; transform: scale(1.4); }
+}
+
+.animate-orb       { animation: orbDrift 14s ease-in-out infinite; }
+.animate-floaty    { animation: floatY 6s ease-in-out infinite; }
+.animate-road-dash { animation: roadDash 1.8s linear infinite; }
+.animate-pulse-dot { animation: pulseDot 2s ease-in-out infinite; }
+
+.delay-1 { animation-delay: 1.5s; }
+.delay-2 { animation-delay: 3s;   }
+.delay-3 { animation-delay: 4.5s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-orb,
+  .animate-floaty,
+  .animate-road-dash,
+  .animate-pulse-dot,
+  [style*="carBob"] {
+    animation: none !important;
+  }
+}

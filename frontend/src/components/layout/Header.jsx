@@ -1,106 +1,157 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Car, Menu, X } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { Menu, X, UserRound } from "lucide-react";
+import MavparkLogo from "../../assets/images/Mavpark.png";
+
+const NAV_LINKS = [
+  { label: "Home", to: "/", kind: "route" },
+  { label: "Lots", to: "/lots", kind: "route" },
+  { label: "Features", to: "/#features", kind: "hash" },
+  { label: "Contact", to: "/contact", kind: "route" },
+];
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const headerRef = useRef(null);
-
-  const closeMenu = () => setIsOpen(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
-    const handleEscape = (e) => {
-      if (e.key === "Escape") closeMenu();
-    };
-    document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
+    const onScroll = () => setIsScrolled(window.scrollY > 16);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (headerRef.current && !headerRef.current.contains(e.target)) {
-        closeMenu();
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    setIsOpen(false);
+  }, [location.pathname, location.hash]);
+
+  useEffect(() => {
+    const onKey = (e) => e.key === "Escape" && setIsOpen(false);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
   }, []);
+
+  const isActive = (link) => {
+    if (link.kind === "hash") {
+      return location.pathname === "/" && location.hash === "#features";
+    }
+    if (link.to === "/") return location.pathname === "/";
+    return location.pathname.startsWith(link.to);
+  };
+
+  const headerBg = isScrolled
+    ? "bg-[#07101F]/85 backdrop-blur-xl border-b border-white/10"
+    : "bg-[#07101F]/60 backdrop-blur-md border-b border-white/5";
 
   return (
     <header
-      ref={headerRef}
-      className="sticky top-0 z-50 border-b border-slate-200 bg-white shadow-md dark:border-slate-700 dark:bg-slate-950"
+      className={`sticky top-0 z-50 transition-all duration-300 ${headerBg}`}
       role="banner"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          <Link
-            to="/"
-            className="flex items-center gap-2 text-gray-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-950 rounded"
-          >
-            <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 to-blue-700">
-              <Car className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-xl font-bold">MavPark</span>
-          </Link>
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Link
+          to="/"
+          className="flex items-center gap-2 text-white rounded focus:outline-none focus:ring-2 focus:ring-[color:var(--uta-orange)]"
+          aria-label="MavPark home"
+        >
+          <img
+            src={MavparkLogo}
+            alt=""
+            className="h-9 w-9 rounded-lg object-contain"
+          />
+          <span className="text-xl font-bold tracking-tight">MavPark</span>
+        </Link>
 
-          <div className="relative">
+        <nav
+          className="hidden md:flex items-center gap-8"
+          aria-label="Primary navigation"
+        >
+          {NAV_LINKS.map((link) => {
+            const active = isActive(link);
+            const common =
+              "relative text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[color:var(--uta-orange)] rounded";
+            const color = active
+              ? "text-white"
+              : "text-white/70 hover:text-white";
+
+            const inner = (
+              <>
+                <span>{link.label}</span>
+                {active && (
+                  <span
+                    aria-hidden
+                    className="absolute left-1/2 -bottom-3 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-[color:var(--uta-orange)] shadow-[0_0_10px_rgba(245,128,37,0.9)]"
+                  />
+                )}
+              </>
+            );
+
+            if (link.kind === "hash") {
+              return (
+                <a key={link.label} href={link.to} className={`${common} ${color}`}>
+                  {inner}
+                </a>
+              );
+            }
+            return (
+              <NavLink key={link.label} to={link.to} className={`${common} ${color}`}>
+                {inner}
+              </NavLink>
+            );
+          })}
+        </nav>
+
+        <div className="hidden md:flex items-center">
+          <button
+            type="button"
+            className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:border-[color:var(--uta-orange)] hover:bg-[color:var(--uta-orange)]/10 hover:text-[color:var(--uta-orange-soft)] focus:outline-none focus:ring-2 focus:ring-[color:var(--uta-orange)]"
+            onClick={() => {}}
+          >
+            <UserRound className="h-4 w-4" aria-hidden />
+            Sign In
+          </button>
+        </div>
+
+        <button
+          type="button"
+          className="md:hidden rounded p-2 text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[color:var(--uta-orange)]"
+          aria-label={isOpen ? "Close menu" : "Open menu"}
+          aria-expanded={isOpen}
+          onClick={() => setIsOpen((v) => !v)}
+        >
+          {isOpen ? <X className="h-6 w-6" aria-hidden /> : <Menu className="h-6 w-6" aria-hidden />}
+        </button>
+      </div>
+
+      {isOpen && (
+        <div className="md:hidden border-t border-white/10 bg-[#07101F]/95 backdrop-blur-xl">
+          <nav className="mx-auto flex max-w-7xl flex-col px-4 py-3 sm:px-6" aria-label="Mobile navigation">
+            {NAV_LINKS.map((link) => {
+              const active = isActive(link);
+              const classes = `px-2 py-3 text-base font-medium rounded-md transition-colors ${
+                active ? "text-white bg-white/5" : "text-white/70 hover:text-white hover:bg-white/5"
+              }`;
+              return link.kind === "hash" ? (
+                <a key={link.label} href={link.to} className={classes}>
+                  {link.label}
+                </a>
+              ) : (
+                <NavLink key={link.label} to={link.to} className={classes}>
+                  {link.label}
+                </NavLink>
+              );
+            })}
             <button
               type="button"
-              onClick={() => setIsOpen(!isOpen)}
-              className="rounded p-2 text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-950"
-              aria-label={isOpen ? "Close menu" : "Open menu"}
-              aria-expanded={isOpen}
+              className="mt-2 inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white hover:border-[color:var(--uta-orange)] hover:text-[color:var(--uta-orange-soft)]"
             >
-              {isOpen ? (
-                <X className="h-6 w-6" aria-hidden />
-              ) : (
-                <Menu className="h-6 w-6" aria-hidden />
-              )}
+              <UserRound className="h-4 w-4" aria-hidden />
+              Sign In
             </button>
-
-            {isOpen && (
-              <div
-                className="absolute right-0 mt-1 w-48 rounded-md border border-slate-200 bg-white py-1 shadow-lg dark:border-slate-700 dark:bg-slate-900"
-                role="menu"
-              >
-                <Link
-                  to="/about"
-                  onClick={closeMenu}
-                  className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800 focus:bg-slate-50 focus:outline-none dark:focus:bg-slate-800"
-                  role="menuitem"
-                >
-                  About MavPark
-                </Link>
-                <Link
-                  to="/features"
-                  onClick={closeMenu}
-                  className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800 focus:bg-slate-50 focus:outline-none dark:focus:bg-slate-800"
-                  role="menuitem"
-                >
-                  Features
-                </Link>
-                <Link
-                  to="/contact"
-                  onClick={closeMenu}
-                  className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800 focus:bg-slate-50 focus:outline-none dark:focus:bg-slate-800"
-                  role="menuitem"
-                >
-                  Contact Us
-                </Link>
-                <Link
-                  to="/parking-info"
-                  onClick={closeMenu}
-                  className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800 focus:bg-slate-50 focus:outline-none dark:focus:bg-slate-800"
-                  role="menuitem"
-                >
-                  Parking Info
-                </Link>
-              </div>
-            )}
-          </div>
+          </nav>
         </div>
-      </div>
+      )}
     </header>
   );
 }

@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
+import LotsPage from "../pages/LotsPage";
 import Dashboard from "../pages/Dashboard";
 import AboutUs from "../pages/AboutUs";
 import SpotCalibrationTool from "../pages/SpotCalibrationTool";
@@ -10,6 +11,7 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/lots" element={<LotsPage />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/about" element={<AboutUs />} />
       <Route path="/calibrate" element={<SpotCalibrationTool />} />

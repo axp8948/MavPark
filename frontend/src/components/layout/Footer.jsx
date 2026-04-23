@@ -3,7 +3,7 @@ import React from "react";
 function Footer() {
   return (
     <footer
-      className="border-t border-slate-200 bg-slate-50 py-6 px-4 text-center dark:border-slate-700 dark:bg-slate-950 sm:py-8 sm:px-6"
+      className="relative z-10 border-t border-slate-200 bg-slate-50 py-6 px-4 text-center dark:border-slate-700 dark:bg-slate-950 sm:py-8 sm:px-6"
       role="contentinfo"
       aria-label="Site footer"
     >

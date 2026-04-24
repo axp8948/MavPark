@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 // eslint-disable-next-line no-unused-vars -- `motion` is used as <motion.x> JSX member tags
 import { motion } from "motion/react";
 import { Wifi, WifiOff } from "lucide-react";
@@ -47,7 +48,7 @@ function StatusBadge({ status }) {
   );
 }
 
-function LotCard({ lot, index, onSelectLot }) {
+function LotCard({ lot, index, onOpen }) {
   const status = getLotStatus(lot);
   const isUpcoming = status === "upcoming";
   const isAlmostFull = status === "almost_full";
@@ -126,7 +127,7 @@ function LotCard({ lot, index, onSelectLot }) {
           </button>
         ) : isAlmostFull ? (
           <motion.button
-            onClick={() => onSelectLot(lot.id)}
+            onClick={() => onOpen(lot)}
             whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.98 }}
             className="mt-auto w-full rounded-xl bg-[color:var(--uta-orange)] py-3 text-sm font-semibold uppercase tracking-wider text-[#1A0A00] shadow-[0_10px_30px_-10px_rgba(245,128,37,0.7)] transition-all hover:brightness-110"
@@ -135,7 +136,7 @@ function LotCard({ lot, index, onSelectLot }) {
           </motion.button>
         ) : (
           <motion.button
-            onClick={() => onSelectLot(lot.id)}
+            onClick={() => onOpen(lot)}
             whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.98 }}
             className="mt-auto w-full rounded-xl border border-white/20 bg-white/[0.04] py-3 text-sm font-semibold uppercase tracking-wider text-white transition-all hover:border-white/30 hover:bg-white/[0.08]"
@@ -148,10 +149,13 @@ function LotCard({ lot, index, onSelectLot }) {
   );
 }
 
-function ParkingLots({ onSelectLot }) {
+function ParkingLots() {
+  const navigate = useNavigate();
+
   const [lots, setLots] = useState([
     {
       id: 1,
+      slug: "lot-f12",
       name: "Lot A",
       location: "F-12",
       totalSpots: 84,
@@ -160,6 +164,7 @@ function ParkingLots({ onSelectLot }) {
     },
     {
       id: 2,
+      slug: "lot-f10",
       name: "Lot B",
       location: "F-10",
       totalSpots: 0,
@@ -168,6 +173,7 @@ function ParkingLots({ onSelectLot }) {
     },
     {
       id: 3,
+      slug: null,
       name: "Lot C",
       location: "Coming Soon",
       totalSpots: 0,
@@ -176,6 +182,7 @@ function ParkingLots({ onSelectLot }) {
     },
     {
       id: 4,
+      slug: null,
       name: "Lot D",
       location: "Coming Soon",
       totalSpots: 0,
@@ -183,6 +190,10 @@ function ParkingLots({ onSelectLot }) {
       status: "upcoming",
     },
   ]);
+
+  const handleOpen = (lot) => {
+    if (lot?.slug) navigate(`/lots/${lot.slug}`);
+  };
 
   const [filter, setFilter] = useState("all");
 
@@ -192,66 +203,53 @@ function ParkingLots({ onSelectLot }) {
   });
 
   useEffect(() => {
-    if (parkingData) {
-      setLots((prevLots) =>
-        prevLots.map((lot) => {
-          if (
-            (lot.name === parkingData.parkingLotName ||
-              (lot.id === 1 && lot.status === "active")) &&
-            lot.status !== "upcoming"
-          ) {
-            return {
-              ...lot,
-              name: parkingData.parkingLotName || lot.name,
-              totalSpots: parkingData.totalSpots || lot.totalSpots,
-              availableSpots: parkingData.freeSpots || lot.availableSpots,
-              status: "active",
-            };
-          }
-          return lot;
-        })
-      );
-    }
+    if (!parkingData?.parkingLotName) return;
+    setLots((prevLots) =>
+      prevLots.map((lot) => {
+        if (lot.status === "upcoming") return lot;
+        if (lot.name !== parkingData.parkingLotName) return lot;
+        return {
+          ...lot,
+          totalSpots: parkingData.totalSpots ?? lot.totalSpots,
+          availableSpots: parkingData.freeSpots ?? lot.availableSpots,
+        };
+      }),
+    );
   }, [parkingData]);
 
   useEffect(() => {
     getParkingStatus()
       .then((data) => {
-        if (data?.parkingLotName) {
-          setLots((prevLots) =>
-            prevLots.map((lot) => {
-              if (lot.id === 1) {
-                return {
-                  ...lot,
-                  name: data.parkingLotName || lot.name,
-                  location: lot.location,
-                  totalSpots: data.totalSpots || lot.totalSpots,
-                  availableSpots: data.freeSpots || lot.availableSpots,
-                  status: "active",
-                };
-              }
-              return lot;
-            })
-          );
-        }
+        if (!data?.parkingLotName) return;
+        setLots((prevLots) =>
+          prevLots.map((lot) => {
+            if (lot.status === "upcoming") return lot;
+            if (lot.name !== data.parkingLotName) return lot;
+            return {
+              ...lot,
+              totalSpots: data.totalSpots ?? lot.totalSpots,
+              availableSpots: data.freeSpots ?? lot.availableSpots,
+            };
+          }),
+        );
       })
       .catch((err) => console.warn("Could not fetch initial status:", err));
 
     getParkingLots()
       .then((data) => {
-        if (data && data.length > 0) {
-          setLots((prevLots) =>
-            prevLots.map((prevLot) => {
-              const matchingLot = data.find(
-                (d) => d.name === prevLot.name || d.id === prevLot.id
-              );
-              if (matchingLot && prevLot.status !== "upcoming") {
-                return { ...prevLot, ...matchingLot, status: "active" };
-              }
-              return prevLot;
-            })
-          );
-        }
+        if (!data || data.length === 0) return;
+        setLots((prevLots) =>
+          prevLots.map((prevLot) => {
+            if (prevLot.status === "upcoming") return prevLot;
+            const match = data.find((d) => d.name === prevLot.name);
+            if (!match) return prevLot;
+            return {
+              ...prevLot,
+              totalSpots: match.totalSpots ?? prevLot.totalSpots,
+              availableSpots: match.availableSpots ?? prevLot.availableSpots,
+            };
+          }),
+        );
       })
       .catch((err) => console.warn("Could not fetch parking lots:", err));
   }, []);
@@ -326,7 +324,7 @@ function ParkingLots({ onSelectLot }) {
                 key={lot.id}
                 lot={lot}
                 index={index}
-                onSelectLot={onSelectLot}
+                onOpen={handleOpen}
               />
             ))}
           </div>

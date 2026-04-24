@@ -3,6 +3,8 @@ import piyush from "../assets/images/profiles/piyush.jpeg";
 import pranil from "../assets/images/profiles/pranil.JPG";
 import raisa from "../assets/images/profiles/raisa.jpeg";
 import chenxi from "../assets/images/profiles/chenxi_wang.jpeg";
+import anu from "../assets/images/profiles/anu.jpg";
+import saugat from "../assets/images/profiles/saugat.jpeg";
 
 export const TEAM = [
   {
@@ -22,13 +24,13 @@ export const TEAM = [
   {
     name: "Saugat Bhatta",
     role: "Backend Developer",
-    image: null,
+    image: saugat,
     github: "https://github.com/Saugat1017",
     linkedin: " https://www.linkedin.com/in/saugat-bhatta-01a595217/",
   },
   {
     name: "Pranil Lama",
-    role: "CV/ML / Hardware",
+    role: "CV / ML / Hardware",
     image: pranil,
     github: "https://github.com/Pranillama",
     linkedin: "https://www.linkedin.com/in/pranillama50/",
@@ -43,7 +45,7 @@ export const TEAM = [
   {
     name: "Anu Gurung",
     role: "Frontend Developer / UI Design",
-    image: null,
+    image: anu,
     github: "#",
     linkedin: "https://www.linkedin.com/in/anu-gurung-7018b924a/",
   },

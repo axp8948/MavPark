@@ -45,6 +45,21 @@ function ParkingLotDetail({ selectedLot, onBack }) {
     availableSpots: 0,
   });
 
+  // Reset local state when the selected lot changes (e.g. navigating between
+  // /lots/lot-f12 and /lots/lot-f10). Without this, the previous lot's data
+  // would bleed into the newly opened lot.
+  useEffect(() => {
+    setLot({
+      id: selectedLot,
+      name: lotConfig.name,
+      location: lotConfig.location,
+      totalSpots: lotConfig.totalSpots,
+      availableSpots: 0,
+    });
+    setParkingSpots(generateParkingSpots());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedLot]);
+
   // Helper to convert backend status to component status
   const mapStatus = (backendStatus) => {
     if (backendStatus === "free") return "available";
@@ -52,41 +67,48 @@ function ParkingLotDetail({ selectedLot, onBack }) {
     return "unknown";
   };
 
-  // Update spots when WebSocket receives data from backend
+  // Update spots when WebSocket receives data from backend.
+  // We only apply the update if the broadcast is for THIS lot — otherwise
+  // a Lot A broadcast would clobber the Lot B detail view and vice versa.
   useEffect(() => {
-    if (Array.isArray(parkingData?.spots)) {
-      // Derive counts from the spots array so header matches the map
-      const totalFromSpots = parkingData.spots.length;
-      const freeFromSpots = parkingData.spots.filter(
-        (spot) => spot.status === "free",
-      ).length;
-
-      setLot((prevLot) => ({
-        id: selectedLot,
-        name: parkingData.parkingLotName || prevLot.name,
-        location: prevLot.location,
-        totalSpots: totalFromSpots || prevLot.totalSpots,
-        availableSpots: freeFromSpots,
-      }));
-
-      // Backend sends "spot_001", "spot_002", ... (1-based index)
-      // Local spots use spotIdOffset + index (e.g. 401, 402, ...)
-      const spotsMap = new Map();
-      parkingData.spots.forEach((spot) => {
-        const spotIndex = parseInt(spot.spotId.replace("spot_", ""), 10);
-        const localId = (lotConfig.spotIdOffset + spotIndex).toString();
-        spotsMap.set(localId, mapStatus(spot.status));
-      });
-
-      setParkingSpots((prevSpots) =>
-        prevSpots.map((spot) => {
-          const status = spotsMap.get(spot.number);
-          if (status) return { ...spot, status };
-          return { ...spot, status: "unknown" };
-        }),
-      );
+    if (!Array.isArray(parkingData?.spots)) return;
+    if (
+      parkingData.parkingLotName &&
+      parkingData.parkingLotName !== lotConfig.name
+    ) {
+      return;
     }
-  }, [parkingData, selectedLot, lotConfig.spotIdOffset]);
+
+    const totalFromSpots = parkingData.spots.length;
+    const freeFromSpots = parkingData.spots.filter(
+      (spot) => spot.status === "free",
+    ).length;
+
+    setLot((prevLot) => ({
+      id: selectedLot,
+      name: parkingData.parkingLotName || prevLot.name,
+      location: prevLot.location,
+      totalSpots: totalFromSpots || prevLot.totalSpots,
+      availableSpots: freeFromSpots,
+    }));
+
+    // Backend sends "spot_001", "spot_002", ... (1-based index)
+    // Local spots use spotIdOffset + index (e.g. 401, 402, ...)
+    const spotsMap = new Map();
+    parkingData.spots.forEach((spot) => {
+      const spotIndex = parseInt(spot.spotId.replace("spot_", ""), 10);
+      const localId = (lotConfig.spotIdOffset + spotIndex).toString();
+      spotsMap.set(localId, mapStatus(spot.status));
+    });
+
+    setParkingSpots((prevSpots) =>
+      prevSpots.map((spot) => {
+        const status = spotsMap.get(spot.number);
+        if (status) return { ...spot, status };
+        return { ...spot, status: "unknown" };
+      }),
+    );
+  }, [parkingData, selectedLot, lotConfig.spotIdOffset, lotConfig.name]);
 
   // Fetch spots when lot is selected (fallback for initial load)
   // Only update statuses - don't replace the spots array (preserves coordinate mapping)

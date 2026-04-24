@@ -1,7 +1,5 @@
-import React, { useState } from "react";
-import { AnimatePresence } from "motion/react";
-import ParkingLots from "./ParkingLots";
-import ParkingLotDetail from "./ParkingLotDetail";
+import React from "react";
+import { Outlet } from "react-router-dom";
 
 function BackgroundFX() {
   return (
@@ -28,26 +26,11 @@ function BackgroundFX() {
 }
 
 function LotsPage() {
-  const [selectedLot, setSelectedLot] = useState(null);
-
   return (
     <div className="relative isolate min-h-screen overflow-hidden bg-[#07101F] text-white">
       <BackgroundFX />
-
       <div className="relative z-10">
-        <AnimatePresence mode="wait">
-          {selectedLot === null ? (
-            <ParkingLots key="lots" onSelectLot={setSelectedLot} />
-          ) : (
-            <div className="container mx-auto px-4 py-12">
-              <ParkingLotDetail
-                key="detail"
-                selectedLot={selectedLot}
-                onBack={() => setSelectedLot(null)}
-              />
-            </div>
-          )}
-        </AnimatePresence>
+        <Outlet />
       </div>
     </div>
   );

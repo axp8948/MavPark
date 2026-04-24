@@ -7,6 +7,7 @@ import {
 
 const lotConfigs = {
   1: {
+    slug: 'lot-f12',
     name: 'Lot A',
     code: 'F-12',
     location: 'Faculty/Staff',
@@ -24,6 +25,7 @@ const lotConfigs = {
     zoom: 19,
   },
   2: {
+    slug: 'lot-f10',
     name: 'Lot B',
     code: 'F-10',
     location: 'Student',
@@ -40,6 +42,21 @@ const lotConfigs = {
     spotIdOffset: 700,
     zoom: 19,
   },
+};
+
+export const getLotBySlug = (slug) => {
+  const entry = Object.entries(lotConfigs).find(
+    ([, cfg]) => cfg.slug === slug,
+  );
+  if (!entry) return null;
+  const [id, cfg] = entry;
+  return { id: Number(id), ...cfg };
+};
+
+export const getLotById = (id) => {
+  const cfg = lotConfigs[id];
+  if (!cfg) return null;
+  return { id: Number(id), ...cfg };
 };
 
 export default lotConfigs;

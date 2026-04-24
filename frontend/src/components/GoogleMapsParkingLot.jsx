@@ -26,7 +26,8 @@ const LEGEND_COLORS = {
   noData: "#F58025",
 };
 
-const centerOffset = (w, h) => ({ x: -w / 2, y: -h / 2 });
+const FORWARD_SHIFT_PX = 12; // tweak until it lines up with the Figma stalls
+const centerOffset = (w, h) => ({ x: -w / 2 - FORWARD_SHIFT_PX, y: -h / 2 });
 
 // Pick a size in px for a spot marker based on current map zoom.
 // At zoom 19 the overlay reads at roughly a stall-per-spot scale; above that
@@ -45,7 +46,7 @@ const GoogleMapsParkingLot = ({
   overlayBounds,
   overlayImage,
   zoom = 19,
-  carRotation = 0,
+  carRotation = -125,
 }) => {
   const [, setMap] = useState(null);
   const [currentZoom, setCurrentZoom] = useState(zoom);
@@ -98,7 +99,10 @@ const GoogleMapsParkingLot = ({
   }
 
   const carSize = sizeForZoom(currentZoom);
-  const slotSize = Math.max(8, Math.round(carSize * 0.55));
+  // const slotSize = Math.max(8, Math.round(carSize * 0.65));
+
+  const slotWidth  = Math.round(carSize * 0.45);
+  const slotHeight = Math.round(carSize * 0.9);
 
   return (
     <div className="relative">
@@ -172,7 +176,8 @@ const GoogleMapsParkingLot = ({
               <SpotMarker
                 spot={spot}
                 carSize={carSize}
-                slotSize={slotSize}
+                slotWidth={slotWidth}
+                slotHeight={slotHeight}
                 rotation={carRotation}
                 onClick={() => onSpotClick && onSpotClick(spot)}
               />
@@ -199,7 +204,7 @@ function LegendRow({ color, label, value }) {
   );
 }
 
-function SpotMarker({ spot, carSize, slotSize, rotation, onClick }) {
+function SpotMarker({ spot, carSize, slotWidth, slotHeight, rotation, onClick }) {
   const status = spot.status;
   const label = `Spot ${spot.number ?? spot.id} — ${status}`;
 
@@ -239,10 +244,12 @@ function SpotMarker({ spot, carSize, slotSize, rotation, onClick }) {
       title={label}
       className="block cursor-pointer rounded-[3px] border p-0 outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
       style={{
-        width: slotSize,
-        height: slotSize,
+        width: slotWidth,
+        height: slotHeight,
         backgroundColor: `${tint}33`, // ~20% fill
         borderColor: tint,
+        transform: `rotate(${rotation}deg)`,
+        transformOrigin: "center",
       }}
     />
   );

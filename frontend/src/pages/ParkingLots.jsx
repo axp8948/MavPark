@@ -1,11 +1,154 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+// eslint-disable-next-line no-unused-vars -- `motion` is used as <motion.x> JSX member tags
 import { motion } from "motion/react";
-import { Moon, Sun, HelpCircle, Wifi, WifiOff } from "lucide-react";
+import { Wifi, WifiOff } from "lucide-react";
 import { getParkingLots, getParkingStatus } from "../services/parkingService";
 import { useWebSocket } from "../hooks/useWebSocket";
-import mavparkLogo from "../assets/images/Mavpark.png";
 
-function ParkingLots({ onSelectLot, isDarkMode, setIsDarkMode }) {
+const FILTERS = [
+  { id: "all", label: "All Lots" },
+  { id: "available", label: "Available" },
+  { id: "almost_full", label: "Almost Full" },
+];
+
+function getLotStatus(lot) {
+  if (lot.status === "upcoming") return "upcoming";
+  const pct =
+    lot.totalSpots > 0 ? (lot.availableSpots / lot.totalSpots) * 100 : 0;
+  if (pct >= 50) return "available";
+  return "almost_full";
+}
+
+function StatusBadge({ status }) {
+  if (status === "available") {
+    return (
+      <span className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-300">
+        <span className="relative flex h-2.5 w-2.5">
+          <span className="absolute inset-0 rounded-full bg-emerald-400/30 animate-ping" />
+          <span className="relative h-2.5 w-2.5 rounded-full ring-2 ring-emerald-400 bg-emerald-400/30" />
+        </span>
+        Available
+      </span>
+    );
+  }
+  if (status === "almost_full") {
+    return (
+      <span className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--uta-orange-soft)]">
+        <span className="h-2.5 w-2.5 rounded-full ring-2 ring-[color:var(--uta-orange)] bg-[color:var(--uta-orange)]/30" />
+        Almost Full
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+      <span className="h-2.5 w-2.5 rounded-full ring-2 ring-white/30 bg-white/10" />
+      Coming Soon
+    </span>
+  );
+}
+
+function LotCard({ lot, index, onSelectLot }) {
+  const status = getLotStatus(lot);
+  const isUpcoming = status === "upcoming";
+  const isAlmostFull = status === "almost_full";
+  const pct =
+    lot.totalSpots > 0 ? (lot.availableSpots / lot.totalSpots) * 100 : 0;
+
+  const numberColor = isAlmostFull
+    ? "text-[color:var(--uta-orange-soft)]"
+    : "text-white";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.15 + index * 0.08 }}
+      whileHover={!isUpcoming ? { y: -4 } : {}}
+      className="group"
+    >
+      <div
+        className={`relative flex h-full flex-col rounded-2xl border p-6 backdrop-blur-sm transition-all duration-300 ${
+          isUpcoming
+            ? "border-white/10 bg-[#0B1A2E]/70 opacity-80"
+            : "border-white/10 bg-[#0B1A2E]/80 hover:border-white/20 hover:shadow-[0_20px_50px_-20px_rgba(59,130,246,0.45)]"
+        }`}
+      >
+        <div className="mb-5 flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+              Zone {lot.location || "—"}
+            </p>
+            <h3 className="mt-1 text-2xl font-bold text-white">{lot.name}</h3>
+          </div>
+          <StatusBadge status={status} />
+        </div>
+
+        {isUpcoming ? (
+          <div className="mb-6 flex-1">
+            <p className="text-sm text-slate-400">
+              New Maverick lot. Stay tuned for live availability.
+            </p>
+          </div>
+        ) : (
+          <>
+            <div className="mb-2 flex items-baseline gap-2">
+              <span className={`text-5xl font-bold leading-none ${numberColor}`}>
+                {lot.availableSpots}
+              </span>
+              <span className="text-lg text-slate-400">/ {lot.totalSpots}</span>
+            </div>
+            <p className="mb-5 text-sm text-slate-400">
+              spaces currently free
+            </p>
+
+            <div className="mb-6 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${pct}%` }}
+                transition={{ duration: 1, delay: 0.4 + index * 0.08 }}
+                className={`h-full rounded-full ${
+                  isAlmostFull
+                    ? "bg-[color:var(--uta-orange)]"
+                    : "bg-emerald-400"
+                }`}
+              />
+            </div>
+          </>
+        )}
+
+        {isUpcoming ? (
+          <button
+            type="button"
+            disabled
+            className="mt-auto w-full cursor-not-allowed rounded-xl border border-white/10 bg-white/[0.03] py-3 text-sm font-semibold uppercase tracking-wider text-slate-500"
+          >
+            Notify Me
+          </button>
+        ) : isAlmostFull ? (
+          <motion.button
+            onClick={() => onSelectLot(lot.id)}
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.98 }}
+            className="mt-auto w-full rounded-xl bg-[color:var(--uta-orange)] py-3 text-sm font-semibold uppercase tracking-wider text-[#1A0A00] shadow-[0_10px_30px_-10px_rgba(245,128,37,0.7)] transition-all hover:brightness-110"
+          >
+            View Spot Map
+          </motion.button>
+        ) : (
+          <motion.button
+            onClick={() => onSelectLot(lot.id)}
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.98 }}
+            className="mt-auto w-full rounded-xl border border-white/20 bg-white/[0.04] py-3 text-sm font-semibold uppercase tracking-wider text-white transition-all hover:border-white/30 hover:bg-white/[0.08]"
+          >
+            View Spot Map
+          </motion.button>
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
+function ParkingLots({ onSelectLot }) {
   const [lots, setLots] = useState([
     {
       id: 1,
@@ -13,7 +156,7 @@ function ParkingLots({ onSelectLot, isDarkMode, setIsDarkMode }) {
       location: "F-12",
       totalSpots: 84,
       availableSpots: 0,
-      status: "active", // active or upcoming
+      status: "active",
     },
     {
       id: 2,
@@ -41,115 +184,42 @@ function ParkingLots({ onSelectLot, isDarkMode, setIsDarkMode }) {
     },
   ]);
 
-  // Mini-map parking spots data (for visualization)
-  // All spots set to 'unknown' (gray) until CV model sends real data
-  const [parkingSpots] = useState([
-    // Row A1: A01–A11
-    { id: 'A01', number: 'A01', status: 'unknown' },
-    { id: 'A02', number: 'A02', status: 'unknown' },
-    { id: 'A03', number: 'A03', status: 'unknown' },
-    { id: 'A04', number: 'A04', status: 'unknown' },
-    { id: 'A05', number: 'A05', status: 'unknown' },
-    { id: 'A06', number: 'A06', status: 'unknown' },
-    { id: 'A07', number: 'A07', status: 'unknown' },
-    { id: 'A08', number: 'A08', status: 'unknown' },
-    { id: 'A09', number: 'A09', status: 'unknown' },
-    { id: 'A10', number: 'A10', status: 'unknown' },
-    { id: 'A11', number: 'A11', status: 'unknown' },
-    // Row A2: A12–A22
-    { id: 'A12', number: 'A12', status: 'unknown' },
-    { id: 'A13', number: 'A13', status: 'unknown' },
-    { id: 'A14', number: 'A14', status: 'unknown' },
-    { id: 'A15', number: 'A15', status: 'unknown' },
-    { id: 'A16', number: 'A16', status: 'unknown' },
-    { id: 'A17', number: 'A17', status: 'unknown' },
-    { id: 'A18', number: 'A18', status: 'unknown' },
-    { id: 'A19', number: 'A19', status: 'unknown' },
-    { id: 'A20', number: 'A20', status: 'unknown' },
-    { id: 'A21', number: 'A21', status: 'unknown' },
-    { id: 'A22', number: 'A22', status: 'unknown' },
-    // Row B: B01–B11
-    { id: 'B01', number: 'B01', status: 'unknown' },
-    { id: 'B02', number: 'B02', status: 'unknown' },
-    { id: 'B03', number: 'B03', status: 'unknown' },
-    { id: 'B04', number: 'B04', status: 'unknown' },
-    { id: 'B05', number: 'B05', status: 'unknown' },
-    { id: 'B06', number: 'B06', status: 'unknown' },
-    { id: 'B07', number: 'B07', status: 'unknown' },
-    { id: 'B08', number: 'B08', status: 'unknown' },
-    { id: 'B09', number: 'B09', status: 'unknown' },
-    { id: 'B10', number: 'B10', status: 'unknown' },
-    { id: 'B11', number: 'B11', status: 'unknown' },
-  ]);
+  const [filter, setFilter] = useState("all");
 
-  // Calculate status message based on availability
-  const getStatusInfo = (available, total) => {
-    const percentAvailable = (available / total) * 100;
-    if (percentAvailable >= 50) {
-      return { text: 'Plenty of space', color: 'bg-green-500' };
-    } else if (percentAvailable >= 20) {
-      return { text: 'Filling up', color: 'bg-yellow-500' };
-    } else {
-      return { text: 'Almost full', color: 'bg-red-500' };
-    }
-  };
-
-  // Derive rows for the visual layout (for mini-map)
-  const rowA1 = parkingSpots.filter((spot) => {
-    if (!spot.number.startsWith('A')) return false;
-    const n = parseInt(spot.number.substring(1), 10);
-    return n >= 1 && n <= 11;
-  });
-
-  const rowA2 = parkingSpots.filter((spot) => {
-    if (!spot.number.startsWith('A')) return false;
-    const n = parseInt(spot.number.substring(1), 10);
-    return n >= 12 && n <= 22;
-  });
-
-  const rowB = parkingSpots.filter((spot) => spot.number.startsWith('B'));
-
-  // WebSocket integration - connects to Spring Boot backend
   const { isConnected, parkingData, error: wsError } = useWebSocket({
     autoConnect: true,
     autoSubscribe: true,
   });
 
-  // Update parking lots when WebSocket receives data from Spring backend
   useEffect(() => {
     if (parkingData) {
-      console.log('Received parking update from Spring:', parkingData);
-      
-      // Update the lot based on data from Spring backend (ParkingUpdateRequest)
-      // parkingData structure: {parkingLotName, totalSpots, freeSpots, occupiedSpots}
       setLots((prevLots) =>
         prevLots.map((lot) => {
-          // Match by lot name or update the first active lot (not upcoming)
-          if ((lot.name === parkingData.parkingLotName || (lot.id === 1 && lot.status === "active")) && lot.status !== "upcoming") {
+          if (
+            (lot.name === parkingData.parkingLotName ||
+              (lot.id === 1 && lot.status === "active")) &&
+            lot.status !== "upcoming"
+          ) {
             return {
               ...lot,
               name: parkingData.parkingLotName || lot.name,
               totalSpots: parkingData.totalSpots || lot.totalSpots,
               availableSpots: parkingData.freeSpots || lot.availableSpots,
-              status: "active", // Preserve active status
+              status: "active",
             };
           }
-          return lot; // Keep upcoming lots unchanged
+          return lot;
         })
       );
     }
   }, [parkingData]);
 
-  // Fetch initial parking status from Spring backend
   useEffect(() => {
-    // Try to get initial data from Spring backend
     getParkingStatus()
       .then((data) => {
-        console.log('Initial parking status from Spring:', data);
-        if (data.parkingLotName) {
+        if (data?.parkingLotName) {
           setLots((prevLots) =>
             prevLots.map((lot) => {
-              // Update only Lot A (id: 1) with active status
               if (lot.id === 1) {
                 return {
                   ...lot,
@@ -160,362 +230,135 @@ function ParkingLots({ onSelectLot, isDarkMode, setIsDarkMode }) {
                   status: "active",
                 };
               }
-              return lot; // Keep other lots (upcoming) unchanged
+              return lot;
             })
           );
         }
       })
-      .catch((err) => console.warn('Could not fetch initial status:', err));
+      .catch((err) => console.warn("Could not fetch initial status:", err));
 
-    // Also try the old endpoint as fallback
     getParkingLots()
       .then((data) => {
         if (data && data.length > 0) {
-          // Merge with existing lots, preserving upcoming lots
-          setLots((prevLots) => {
-            const updatedLots = prevLots.map((prevLot) => {
-              const matchingLot = data.find((d) => d.name === prevLot.name || d.id === prevLot.id);
+          setLots((prevLots) =>
+            prevLots.map((prevLot) => {
+              const matchingLot = data.find(
+                (d) => d.name === prevLot.name || d.id === prevLot.id
+              );
               if (matchingLot && prevLot.status !== "upcoming") {
-                return {
-                  ...prevLot,
-                  ...matchingLot,
-                  status: "active",
-                };
+                return { ...prevLot, ...matchingLot, status: "active" };
               }
               return prevLot;
-            });
-            return updatedLots;
-          });
+            })
+          );
         }
       })
-      .catch((err) => console.warn('Could not fetch parking lots:', err));
+      .catch((err) => console.warn("Could not fetch parking lots:", err));
   }, []);
 
-  useEffect(() => {
-    // Load dark mode preference
-    const saved = localStorage.getItem("mavpark-darkMode");
-    if (saved !== null) {
-      setIsDarkMode(saved === "true");
-    }
-  }, [setIsDarkMode]);
-
-  useEffect(() => {
-    // Save dark mode preference
-    localStorage.setItem("mavpark-darkMode", String(isDarkMode));
-  }, [isDarkMode]);
+  const filteredLots = useMemo(() => {
+    if (filter === "all") return lots;
+    return lots.filter((lot) => getLotStatus(lot) === filter);
+  }, [lots, filter]);
 
   return (
-    <div className="min-h-screen relative">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
+    <div className="relative min-h-screen">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 pb-20 pt-14 sm:px-6 lg:px-8">
+        <motion.header
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="max-w-7xl mx-auto"
+          className="mb-10"
         >
-          {/* Hero Header Section */}
-          <div className="text-center mb-12 md:mb-16">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="flex justify-center mb-6"
-            >
-              <img
-                src={mavparkLogo}
-                alt="MavPark Logo"
-                className="w-48 h-48 md:w-64 md:h-64 object-contain drop-shadow-2xl"
-              />
-            </motion.div>
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className={`text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r ${
-                isDarkMode 
-                  ? 'from-blue-400 to-purple-400' 
-                  : 'from-blue-600 to-orange-500'
-              } bg-clip-text text-transparent`}
-            >
-              Welcome to MavPark
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className={`text-lg md:text-xl ${
-                isDarkMode ? 'text-gray-300' : 'text-gray-600'
-              } max-w-2xl mx-auto`}
-            >
-              Find your perfect parking spot at UTA with real-time availability
-            </motion.p>
-          </div>
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-300 backdrop-blur">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inset-0 rounded-full bg-[color:var(--uta-orange)]/50 animate-ping" />
+              <span className="relative h-2 w-2 rounded-full bg-[color:var(--uta-orange)] animate-pulse-dot" />
+            </span>
+            Live Availability
+          </span>
 
-          {/* Parking Lots Grid */}
-          <div className="mb-8">
-            <h2
-              className={`text-2xl md:text-3xl font-bold mb-6 ${
-                isDarkMode ? 'text-gray-100' : 'text-gray-900'
-              }`}
+          <div className="mt-5 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-2xl">
+              <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
+                Find Your Spot
+              </h1>
+              <p className="mt-3 text-base text-slate-400 sm:text-lg">
+                Real-time parking analytics for the Maverick community.
+              </p>
+            </div>
+
+            <div
+              role="tablist"
+              aria-label="Filter lots"
+              className="flex flex-wrap items-center gap-2"
             >
-              Available Parking Lots
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {lots.map((lot, index) => {
-                const isUpcoming = lot.status === "upcoming";
-                const statusInfo = isUpcoming 
-                  ? { text: 'Upcoming', color: 'bg-gray-500' }
-                  : getStatusInfo(lot.availableSpots, lot.totalSpots);
-                const availabilityPercent = lot.totalSpots > 0 
-                  ? (lot.availableSpots / lot.totalSpots) * 100 
-                  : 0;
-                
+              {FILTERS.map((f) => {
+                const active = filter === f.id;
                 return (
-                  <motion.div
-                    key={lot.id}
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
-                    whileHover={!isUpcoming ? { y: -8, transition: { duration: 0.2 } } : {}}
-                    className="group"
+                  <button
+                    key={f.id}
+                    role="tab"
+                    aria-selected={active}
+                    onClick={() => setFilter(f.id)}
+                    className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-all ${
+                      active
+                        ? "border-[color:var(--uta-orange)] bg-[color:var(--uta-orange)]/10 text-[color:var(--uta-orange-soft)]"
+                        : "border-white/10 bg-white/[0.03] text-slate-400 hover:border-white/20 hover:text-slate-200"
+                    }`}
                   >
-                    <div
-                      className={`relative h-full p-6 rounded-2xl border backdrop-blur-xl transition-all duration-300 ${
-                        isUpcoming
-                          ? isDarkMode
-                            ? 'bg-gray-800/40 border-gray-700/30 opacity-75'
-                            : 'bg-gray-100/50 border-gray-300/50 opacity-75'
-                          : isDarkMode
-                          ? 'bg-gray-800/60 border-gray-700/50 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/20'
-                          : 'bg-white/70 border-gray-200/50 hover:border-blue-300 hover:shadow-2xl hover:shadow-blue-500/10'
-                      }`}
-                    >
-                      {/* Gradient accent bar */}
-                      <div className={`absolute top-0 left-0 right-0 h-1 rounded-t-2xl ${
-                        isUpcoming
-                          ? 'bg-gradient-to-r from-gray-400 to-gray-500'
-                          : availabilityPercent >= 50 
-                          ? 'bg-gradient-to-r from-green-400 to-green-600'
-                          : availabilityPercent >= 20
-                          ? 'bg-gradient-to-r from-yellow-400 to-yellow-600'
-                          : 'bg-gradient-to-r from-red-400 to-red-600'
-                      }`}></div>
-
-                      {/* Lot Header */}
-                      <div className="mb-4">
-                        <div className="flex items-start justify-between mb-2">
-                          <div>
-                            <h3
-                              className={`text-2xl font-bold mb-1 ${
-                                isUpcoming
-                                  ? isDarkMode ? 'text-gray-500' : 'text-gray-400'
-                                  : isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                              }`}
-                            >
-                              {lot.name}
-                            </h3>
-                            <p
-                              className={`text-sm ${
-                                isUpcoming
-                                  ? isDarkMode ? 'text-gray-600' : 'text-gray-500'
-                                  : isDarkMode ? 'text-gray-400' : 'text-gray-500'
-                              }`}
-                            >
-                              {lot.location}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Availability Stats or Upcoming Message */}
-                      {isUpcoming ? (
-                        <div className="mb-4">
-                          <div className="flex items-center justify-center py-8">
-                            <div className="text-center">
-                              <div className={`text-4xl mb-2 ${
-                                isDarkMode ? 'text-gray-600' : 'text-gray-400'
-                              }`}>
-                                🚧
-                              </div>
-                              <p
-                                className={`text-sm font-medium ${
-                                  isDarkMode ? 'text-gray-500' : 'text-gray-500'
-                                }`}
-                              >
-                                Coming Soon
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      ) : (
-                        <>
-                          {/* Availability Stats */}
-                          <div className="mb-4">
-                            <div className="flex items-baseline gap-2 mb-2">
-                              <span
-                                className={`text-3xl font-bold ${
-                                  isDarkMode ? 'text-blue-400' : 'text-blue-600'
-                                }`}
-                              >
-                                {lot.availableSpots}
-                              </span>
-                              <span
-                                className={`text-lg ${
-                                  isDarkMode ? 'text-gray-400' : 'text-gray-500'
-                                }`}
-                              >
-                                / {lot.totalSpots}
-                              </span>
-                            </div>
-                            <p
-                              className={`text-sm ${
-                                isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                              }`}
-                            >
-                              spaces available
-                            </p>
-                          </div>
-
-                          {/* Progress Bar */}
-                          <div className="mb-4">
-                            <div
-                              className={`h-2 rounded-full overflow-hidden ${
-                                isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
-                              }`}
-                            >
-                              <motion.div
-                                initial={{ width: 0 }}
-                                animate={{ width: `${availabilityPercent}%` }}
-                                transition={{ duration: 1, delay: 0.7 + index * 0.1 }}
-                                className={`h-full ${
-                                  availabilityPercent >= 50
-                                    ? 'bg-gradient-to-r from-green-400 to-green-600'
-                                    : availabilityPercent >= 20
-                                    ? 'bg-gradient-to-r from-yellow-400 to-yellow-600'
-                                    : 'bg-gradient-to-r from-red-400 to-red-600'
-                                }`}
-                              ></motion.div>
-                            </div>
-                          </div>
-                        </>
-                      )}
-
-                      {/* Status Badge */}
-                      <div className="mb-6">
-                        <span
-                          className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
-                            statusInfo.color
-                          } text-white`}
-                        >
-                          {statusInfo.text}
-                        </span>
-                      </div>
-
-                      {/* View Map Button or Coming Soon */}
-                      {isUpcoming ? (
-                        <div
-                          className={`w-full py-3 px-4 rounded-xl font-semibold text-center ${
-                            isDarkMode
-                              ? 'bg-gray-700/50 text-gray-400 border border-gray-600/50'
-                              : 'bg-gray-200/50 text-gray-500 border border-gray-300/50'
-                          }`}
-                        >
-                          Coming Soon
-                        </div>
-                      ) : (
-                        <motion.button
-                          onClick={() => onSelectLot(lot.id)}
-                          className={`w-full py-3 px-4 rounded-xl font-semibold transition-all duration-300 ${
-                            isDarkMode
-                              ? 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white shadow-lg shadow-blue-500/30'
-                              : 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white shadow-lg shadow-blue-500/20'
-                          }`}
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                        >
-                          View Spot Map
-                        </motion.button>
-                      )}
-                    </div>
-                  </motion.div>
+                    {f.label}
+                  </button>
                 );
               })}
             </div>
           </div>
+        </motion.header>
 
-        </motion.div>
+        {filteredLots.length === 0 ? (
+          <div className="rounded-2xl border border-white/10 bg-[#0B1A2E]/60 p-10 text-center text-slate-400">
+            No lots match this filter right now.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredLots.map((lot, index) => (
+              <LotCard
+                key={lot.id}
+                lot={lot}
+                index={index}
+                onSelectLot={onSelectLot}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* WebSocket Connection Status - Fixed Position */}
-      <div className="fixed top-24 right-6 z-50">
+      <div className="fixed right-6 top-24 z-40">
         <motion.div
-          initial={{ opacity: 0, x: 20 }}
+          initial={{ opacity: 0, x: 16 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.8 }}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-full shadow-xl backdrop-blur-md border ${
+          transition={{ delay: 0.4 }}
+          className={`flex items-center gap-2 rounded-full border px-3.5 py-2 text-xs font-semibold backdrop-blur-md ${
             isConnected
-              ? isDarkMode
-                ? "bg-green-500/20 border-green-500/30 text-green-300"
-                : "bg-green-500/10 border-green-500/20 text-green-700"
-              : isDarkMode
-              ? "bg-red-500/20 border-red-500/30 text-red-300"
-              : "bg-red-500/10 border-red-500/20 text-red-700"
+              ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-300"
+              : "border-rose-400/30 bg-rose-400/10 text-rose-300"
           }`}
         >
           {isConnected ? (
             <>
-              <Wifi className="w-4 h-4" />
-              <span className="text-sm font-semibold">Live Updates</span>
+              <Wifi className="h-3.5 w-3.5" />
+              <span>Live Updates</span>
             </>
           ) : (
             <>
-              <WifiOff className="w-4 h-4" />
-              <span className="text-sm font-semibold">
-                {wsError ? "Connection Error" : "Connecting..."}
-              </span>
+              <WifiOff className="h-3.5 w-3.5" />
+              <span>{wsError ? "Connection Error" : "Connecting..."}</span>
             </>
           )}
         </motion.div>
-      </div>
-
-      {/* Dark Mode Toggle and Help Button - Fixed Position */}
-      <div className="fixed bottom-8 right-8 z-50 flex flex-col gap-4 items-end">
-        {/* Dark Mode Toggle */}
-        <motion.button
-          onClick={() => setIsDarkMode(!isDarkMode)}
-          className={`p-4 rounded-full shadow-xl backdrop-blur-md border transition-all ${
-            isDarkMode
-              ? "bg-gray-800/80 border-gray-700/50 text-yellow-400 hover:bg-gray-700/80"
-              : "bg-blue-600/90 border-blue-500/50 text-white hover:bg-blue-500/90"
-          }`}
-          whileHover={{ scale: 1.1, rotate: 15 }}
-          whileTap={{ scale: 0.9 }}
-          aria-label="Toggle dark mode"
-        >
-          {isDarkMode ? (
-            <Sun className="w-6 h-6" />
-          ) : (
-            <Moon className="w-6 h-6" />
-          )}
-        </motion.button>
-
-        {/* Help Button */}
-        <motion.button
-          className={`p-3.5 rounded-full shadow-xl backdrop-blur-md border transition-all ${
-            isDarkMode
-              ? "bg-gray-800/80 border-gray-700/50 text-gray-300 hover:bg-gray-700/80"
-              : "bg-gray-900/80 border-gray-800/50 text-white hover:bg-gray-800/80"
-          }`}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          aria-label="Help"
-        >
-          <HelpCircle className="w-5 h-5" />
-        </motion.button>
       </div>
     </div>
   );
 }
 
 export default ParkingLots;
-

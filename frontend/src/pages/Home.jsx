@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 // eslint-disable-next-line no-unused-vars -- `motion` is used as <motion.x> JSX member tags
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import {
@@ -8,9 +8,9 @@ import {
   Clock,
   ShieldCheck,
   MapPin,
-  ArrowRight,
-  Compass,
 } from "lucide-react";
+import MeetTheTeam from "../components/MeetTheTeam";
+import ContactSection from "../components/ContactSection";
 
 /* ------------------------------------------------------------------ */
 /*  Background FX — orbs, grid, faint campus stripes                   */
@@ -398,26 +398,10 @@ function HeroCTAs() {
     <div className="relative mx-auto mt-8 flex max-w-6xl flex-wrap items-center gap-3 px-4 sm:px-6 lg:px-8">
       <Link
         to="/lots"
-        className="group inline-flex items-center gap-2 rounded-full bg-[color:var(--uta-orange)] px-6 py-3 text-sm font-semibold text-[#1a0a00] transition hover:bg-[color:var(--uta-orange-glow)] focus:outline-none focus:ring-2 focus:ring-[color:var(--uta-orange)] focus:ring-offset-2 focus:ring-offset-[#07101F] glow-orange"
+        className="group inline-flex items-center gap-2 rounded-full bg-[color:var(--uta-orange)] px-6 py-3 text-sm font-semibold text-[#1a0a00] transition hover:bg-[color:var(--uta-orange-glow)] focus:outline-none glow-orange"
       >
         <ParkingSquare className="h-4 w-4" aria-hidden />
         View Lots
-      </Link>
-
-      <Link
-        to="/lots#map"
-        className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:border-white/40 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/60"
-      >
-        <Compass className="h-4 w-4" aria-hidden />
-        Explore Map
-      </Link>
-
-      <Link
-        to="/dashboard"
-        className="inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-white/80 transition hover:text-white focus:outline-none focus:ring-2 focus:ring-white/40"
-      >
-        <ArrowRight className="h-4 w-4" aria-hidden />
-        Get Started
       </Link>
     </div>
   );
@@ -452,7 +436,7 @@ function useCountUp(target, { duration = 1600, enabled = true } = {}) {
 
 function StatsStrip() {
   const reduceMotion = useReducedMotion();
-  const lots = useCountUp(30, { enabled: !reduceMotion });
+  const lots = useCountUp(5, { enabled: !reduceMotion });
   const mavs = useCountUp(40, { enabled: !reduceMotion });
 
   return (
@@ -545,6 +529,19 @@ function CTABanner() {
 /*  Page                                                                */
 /* ------------------------------------------------------------------ */
 function Home() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!location.hash) return;
+    const id = location.hash.replace("#", "");
+    const el = document.getElementById(id);
+    if (!el) return;
+    const timeout = setTimeout(() => {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
+    return () => clearTimeout(timeout);
+  }, [location.pathname, location.hash, location.key]);
+
   return (
     <div className="relative isolate min-h-screen bg-[#07101F] text-white">
       {/* Shared meshed / zigzag background — fixed to the viewport so only the
@@ -567,6 +564,8 @@ function Home() {
         </section>
 
         {/* BELOW THE FOLD */}
+        <MeetTheTeam />
+        <ContactSection />
         <CTABanner />
       </div>
     </div>

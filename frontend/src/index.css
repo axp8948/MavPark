@@ -5,6 +5,16 @@ html, body, #root {
   font-family: 'Momo Trust Display', system-ui, sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 /* Theme tokens and dark mode variant */
 @custom-variant dark (&:is(.dark *));
 

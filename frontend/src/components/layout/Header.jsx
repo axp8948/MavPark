@@ -5,9 +5,8 @@ import MavparkLogo from "../../assets/images/Mavpark.png";
 
 const NAV_LINKS = [
   { label: "Home", to: "/", kind: "route" },
-  { label: "Lots", to: "/lots", kind: "route" },
-  { label: "Team", to: "/team", kind: "route" },
-  { label: "Contact", to: "/contact", kind: "route" },
+  { label: "Team", to: "/#team", hash: "#team", kind: "hash" },
+  { label: "Contact", to: "/#contact", hash: "#contact", kind: "hash" },
 ];
 
 function Header() {
@@ -33,8 +32,25 @@ function Header() {
   }, []);
 
   const isActive = (link) => {
-    if (link.to === "/") return location.pathname === "/";
+    if (link.kind === "hash") {
+      return location.pathname === "/" && location.hash === link.hash;
+    }
+    if (link.to === "/") {
+      return location.pathname === "/" && !location.hash;
+    }
     return location.pathname.startsWith(link.to);
+  };
+
+  const handleHashClick = (hash) => (e) => {
+    if (location.pathname === "/") {
+      e.preventDefault();
+      const id = hash.replace("#", "");
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        window.history.replaceState(null, "", `/${hash}`);
+      }
+    }
   };
 
   const headerBg = isScrolled
@@ -86,7 +102,12 @@ function Header() {
 
             if (link.kind === "hash") {
               return (
-                <a key={link.label} href={link.to} className={`${common} ${color}`}>
+                <a
+                  key={link.label}
+                  href={link.to}
+                  onClick={handleHashClick(link.hash)}
+                  className={`${common} ${color}`}
+                >
                   {inner}
                 </a>
               );
@@ -130,7 +151,12 @@ function Header() {
                 active ? "text-white bg-white/5" : "text-white/70 hover:text-white hover:bg-white/5"
               }`;
               return link.kind === "hash" ? (
-                <a key={link.label} href={link.to} className={classes}>
+                <a
+                  key={link.label}
+                  href={link.to}
+                  onClick={handleHashClick(link.hash)}
+                  className={classes}
+                >
                   {link.label}
                 </a>
               ) : (

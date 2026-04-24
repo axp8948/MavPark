@@ -26,8 +26,9 @@ const LEGEND_COLORS = {
   noData: "#F58025",
 };
 
-const FORWARD_SHIFT_PX = 12; // tweak until it lines up with the Figma stalls
-const centerOffset = (w, h) => ({ x: -w / 2 - FORWARD_SHIFT_PX, y: -h / 2 });
+const FORWARD_SHIFT_PX = 10;
+const VERTICAL_SHIFT_PX = 11; // tweak until it lines up with the Figma stalls
+const centerOffset = (w, h) => ({ x: -w / 2 - FORWARD_SHIFT_PX, y: -h / 2 - VERTICAL_SHIFT_PX });
 
 // Pick a size in px for a spot marker based on current map zoom.
 // At zoom 19 the overlay reads at roughly a stall-per-spot scale; above that

@@ -6,7 +6,7 @@ import MavparkLogo from "../../assets/images/Mavpark.png";
 const NAV_LINKS = [
   { label: "Home", to: "/", kind: "route" },
   { label: "Lots", to: "/lots", kind: "route" },
-  { label: "Features", to: "/#features", kind: "hash" },
+  { label: "Team", to: "/team", kind: "route" },
   { label: "Contact", to: "/contact", kind: "route" },
 ];
 
@@ -33,9 +33,6 @@ function Header() {
   }, []);
 
   const isActive = (link) => {
-    if (link.kind === "hash") {
-      return location.pathname === "/" && location.hash === "#features";
-    }
     if (link.to === "/") return location.pathname === "/";
     return location.pathname.startsWith(link.to);
   };

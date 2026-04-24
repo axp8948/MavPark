@@ -10,9 +10,6 @@ import {
   MapPin,
   ArrowRight,
   Compass,
-  Navigation,
-  IdCard,
-  Sparkles,
 } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
@@ -512,76 +509,6 @@ function StatItem({ icon, iconTint, value, label }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Features triad (below-the-fold)                                    */
-/* ------------------------------------------------------------------ */
-function FeatureTriad() {
-  const items = [
-    {
-      icon: <Navigation className="h-5 w-5" />,
-      title: "Live Spot Tracking",
-      body:
-        "See open spots in real time across every UTA lot — no more circling the garage between classes.",
-    },
-    {
-      icon: <Compass className="h-5 w-5" />,
-      title: "Smart Navigation",
-      body:
-        "One tap gets you turn-by-turn directions straight to the nearest open spot on campus.",
-    },
-    {
-      icon: <IdCard className="h-5 w-5" />,
-      title: "Maverick Sign-In",
-      body:
-        "Sign in with your Mav ID to save favorite lots, set reminders, and skip sign-ins across devices.",
-    },
-  ];
-
-  return (
-    <section
-      id="features"
-      className="relative scroll-mt-24 px-4 pb-20 pt-28 sm:px-6 lg:px-8"
-    >
-      <div className="mx-auto max-w-6xl">
-        <div className="mb-10 flex items-center gap-3">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-[color:var(--uta-orange-soft)]">
-            <Sparkles className="h-3.5 w-3.5" aria-hidden />
-            Built for Mavericks
-          </span>
-        </div>
-        <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">
-          Everything you need to park on campus.
-        </h2>
-        <p className="mt-3 max-w-2xl text-white/60">
-          MavPark plugs into UTA's lots so finding a spot feels as easy as
-          checking the weather.
-        </p>
-
-        <div className="mt-10 grid gap-5 md:grid-cols-3">
-          {items.map((f) => (
-            <motion.div
-              key={f.title}
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5 }}
-              className="group rounded-2xl border border-white/10 bg-[#0B1A2E]/70 p-6 backdrop-blur transition hover:border-[color:var(--uta-orange)]/40 hover:bg-[#0B1A2E]"
-            >
-              <div className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[color:var(--uta-orange)]/15 text-[color:var(--uta-orange-soft)] ring-1 ring-[color:var(--uta-orange)]/30">
-                {f.icon}
-              </div>
-              <h3 className="text-lg font-semibold text-white">{f.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-white/65">
-                {f.body}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ------------------------------------------------------------------ */
 /*  Bottom CTA banner                                                   */
 /* ------------------------------------------------------------------ */
 function CTABanner() {
@@ -640,7 +567,6 @@ function Home() {
         </section>
 
         {/* BELOW THE FOLD */}
-        <FeatureTriad />
         <CTABanner />
       </div>
     </div>

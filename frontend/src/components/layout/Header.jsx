@@ -49,7 +49,7 @@ function Header() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link
           to="/"
-          className="flex items-center gap-2 text-white rounded focus:outline-none focus:ring-2 focus:ring-[color:var(--uta-orange)]"
+          className="flex items-center gap-2 text-white rounded focus:outline-none"
           aria-label="MavPark home"
         >
           <img
@@ -67,7 +67,7 @@ function Header() {
           {NAV_LINKS.map((link) => {
             const active = isActive(link);
             const common =
-              "relative text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[color:var(--uta-orange)] rounded";
+              "relative text-sm font-medium transition-colors focus:outline-none rounded";
             const color = active
               ? "text-white"
               : "text-white/70 hover:text-white";
@@ -102,7 +102,7 @@ function Header() {
         <div className="hidden md:flex items-center">
           <button
             type="button"
-            className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:border-[color:var(--uta-orange)] hover:bg-[color:var(--uta-orange)]/10 hover:text-[color:var(--uta-orange-soft)] focus:outline-none focus:ring-2 focus:ring-[color:var(--uta-orange)]"
+            className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:border-[color:var(--uta-orange)] hover:bg-[color:var(--uta-orange)]/10 hover:text-[color:var(--uta-orange-soft)] focus:outline-none"
             onClick={() => {}}
           >
             <UserRound className="h-4 w-4" aria-hidden />
@@ -112,7 +112,7 @@ function Header() {
 
         <button
           type="button"
-          className="md:hidden rounded p-2 text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[color:var(--uta-orange)]"
+          className="md:hidden rounded p-2 text-white hover:bg-white/10 focus:outline-none"
           aria-label={isOpen ? "Close menu" : "Open menu"}
           aria-expanded={isOpen}
           onClick={() => setIsOpen((v) => !v)}

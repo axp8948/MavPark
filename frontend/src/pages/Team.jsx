@@ -46,9 +46,7 @@ function Team() {
               UTA CSE Senior Design 2026
             </span>
             <h1 className="mt-5 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-              The{" "}
-              <span className="text-gradient-maverick">Mavericks</span>{" "}
-              behind MavPark
+              The Mavericks behind MavPark
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-base text-white/70 sm:text-lg">
               A crew of engineers, designers, and a mentor turning parking-lot

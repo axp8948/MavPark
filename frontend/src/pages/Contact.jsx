@@ -86,7 +86,7 @@ function Contact() {
               Get in touch
             </span>
             <h1 className="mt-5 text-4xl font-bold tracking-tight sm:text-5xl">
-              Contact <span className="text-gradient-maverick">Us</span>
+              Contact Us
             </h1>
             <p className="mx-auto mt-3 max-w-md text-sm text-white/60 sm:text-base">
               Questions, feedback, or ideas? Drop us a note and we&apos;ll get

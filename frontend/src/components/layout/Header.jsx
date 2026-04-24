@@ -12,6 +12,7 @@ const NAV_LINKS = [
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
   const location = useLocation();
 
   useEffect(() => {
@@ -31,7 +32,54 @@ function Header() {
     return () => document.removeEventListener("keydown", onKey);
   }, []);
 
+  useEffect(() => {
+    if (location.pathname !== "/") {
+      setActiveSection("");
+      return undefined;
+    }
+
+    const sectionIds = ["team", "contact"];
+
+    const updateActiveSection = () => {
+      const scrollTop = window.scrollY;
+      if (scrollTop < 120) {
+        setActiveSection("home");
+        return;
+      }
+
+      let currentSection = "home";
+      let bestTop = Number.NEGATIVE_INFINITY;
+
+      sectionIds.forEach((id) => {
+        const section = document.getElementById(id);
+        if (!section) return;
+
+        const top = section.getBoundingClientRect().top;
+        if (top <= 160 && top > bestTop) {
+          bestTop = top;
+          currentSection = id;
+        }
+      });
+
+      setActiveSection(currentSection);
+    };
+
+    updateActiveSection();
+    window.addEventListener("scroll", updateActiveSection, { passive: true });
+    window.addEventListener("resize", updateActiveSection);
+
+    return () => {
+      window.removeEventListener("scroll", updateActiveSection);
+      window.removeEventListener("resize", updateActiveSection);
+    };
+  }, [location.pathname]);
+
   const isActive = (link) => {
+    if (location.pathname === "/") {
+      if (link.label === "Home") return activeSection === "home";
+      if (link.hash) return activeSection === link.hash.replace("#", "");
+    }
+
     if (link.kind === "hash") {
       return location.pathname === "/" && location.hash === link.hash;
     }
@@ -51,6 +99,15 @@ function Header() {
         window.history.replaceState(null, "", `/${hash}`);
       }
     }
+  };
+
+  const handleHomeClick = (e) => {
+    if (location.pathname !== "/") return;
+
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.history.replaceState(null, "", "/");
+    setActiveSection("home");
   };
 
   const headerBg = isScrolled
@@ -113,7 +170,12 @@ function Header() {
               );
             }
             return (
-              <NavLink key={link.label} to={link.to} className={`${common} ${color}`}>
+              <NavLink
+                key={link.label}
+                to={link.to}
+                onClick={link.to === "/" ? handleHomeClick : undefined}
+                className={`${common} ${color}`}
+              >
                 {inner}
               </NavLink>
             );
@@ -160,7 +222,12 @@ function Header() {
                   {link.label}
                 </a>
               ) : (
-                <NavLink key={link.label} to={link.to} className={classes}>
+                <NavLink
+                  key={link.label}
+                  to={link.to}
+                  onClick={link.to === "/" ? handleHomeClick : undefined}
+                  className={classes}
+                >
                   {link.label}
                 </NavLink>
               );

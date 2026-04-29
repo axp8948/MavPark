@@ -74,16 +74,27 @@ mvn spring-boot:run
 
 Backend runs on `http://localhost:8080`.
 
-### 3) Vision pipeline (optional, for live detection)
+### 3) Vision pipeline (for live detection)
 
 ```bash
-cd backend
+cd backend/vision/models/sahiDetection
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+python3 parking_pipeline.py
 ```
 
-Then run the pipeline from the vision model directory after configuring camera/video input and ensuring `yolov8n.pt` is available.
+### 4) Visualization
+
+```bash
+cd backend/vision/models/sahiDetection
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python3 visualization.py
+```
+
+Run the pipeline from the vision model directory after configuring camera/video input and ensuring `yolov8n.pt` is available.
 
 ## Environment/configuration
 
